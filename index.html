@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login & Signup</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+/* CARD */
+.container {
+  width: 90%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  overflow: hidden;
+  position: relative;
+}
+
+/* HEADER */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #4facfe;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #4facfe;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #007bff;
+}
+
+/* SWITCH TEXT */
+.switch {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #444;
+}
+
+.switch span {
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* MESSAGE */
+.msg {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* ANIMATION */
+.form {
+  transition: all 0.4s ease;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- SIGNUP FORM -->
+  <div id="signup" class="form">
+    <h2>Create Account</h2>
+
+    <input type="text" id="s_name" placeholder="Name">
+    <input type="text" id="s_mobile" placeholder="Mobile Number">
+    <input type="password" id="s_password" placeholder="Password">
+
+    <button onclick="signup()">Sign Up</button>
+
+    <div class="switch" onclick="toggleForm()">
+      Already have an account? <span>Login</span>
+    </div>
+
+    <div class="msg" id="signupMsg"></div>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="login" class="form" style="display:none;">
+    <h2>Welcome Back</h2>
+
+    <input type="text" id="l_mobile" placeholder="Mobile Number">
+    <input type="password" id="l_password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <div class="switch" onclick="toggleForm()">
+      New user? <span>Sign Up</span>
+    </div>
+
+    <div class="msg" id="loginMsg"></div>
+  </div>
+
+</div>
+
+<script>
+/* 🔥 SUPABASE SETUP */
+const SUPABASE_URL = "https://fconiqhkfsoexqbieydq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_wVA-NALwoRLpqXiWhrPcTw_m584IYRD";
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* SWITCH UI */
+function toggleForm() {
+  const signup = document.getElementById("signup");
+  const login = document.getElementById("login");
+
+  if (signup.style.display === "none") {
+    signup.style.display = "block";
+    login.style.display = "none";
+  } else {
+    signup.style.display = "none";
+    login.style.display = "block";
+  }
+}
+
+/* SIGNUP */
+async function signup() {
+  const name = document.getElementById("s_name").value;
+  const mobile = document.getElementById("s_mobile").value;
+  const password = document.getElementById("s_password").value;
+
+  const msg = document.getElementById("signupMsg");
+
+  if (!name || !mobile || !password) {
+    msg.style.color = "red";
+    msg.innerText = "Please fill all fields";
+    return;
+  }
+
+  const { error } = await db.from("users").insert([
+    {
+      name: name,
+      mobile_number: mobile,
+      password: password
+    }
+  ]);
+
+  if (error) {
+    msg.style.color = "red";
+    msg.innerText = error.message;
+  } else {
+    msg.style.color = "green";
+    msg.innerText = "Account created successfully!";
+  }
+}
+
+/* LOGIN */
+async function login() {
+  const mobile = document.getElementById("l_mobile").value;
+  const password = document.getElementById("l_password").value;
+
+  const msg = document.getElementById("loginMsg");
+
+  const { data, error } = await db
+    .from("users")
+    .select("*")
+    .eq("mobile_number", mobile)
+    .eq("password", password)
+    .single();
+
+  if (error || !data) {
+    msg.style.color = "red";
+    msg.innerText = "Invalid credentials";
+  } else {
+    msg.style.color = "green";
+    msg.innerText = "Login successful!";
+  }
+}
+</script>
+
+</body>
+</html>

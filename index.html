@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Signup Page</title>
+
+<title>Love Login</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
+
 *{
   margin:0;
   padding:0;
@@ -20,102 +22,96 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(135deg,#4facfe,#00f2fe);
+  background:linear-gradient(135deg,#ff758c,#ff7eb3);
+  overflow:hidden;
 }
 
 .container{
   width:90%;
   max-width:380px;
   background:white;
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 15px 35px rgba(0,0,0,0.2);
+  padding:28px;
+  border-radius:25px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+  position:relative;
 }
 
-h2{
+.heart{
   text-align:center;
-  margin-bottom:20px;
-  color:#333;
+  font-size:55px;
+  margin-bottom:10px;
+}
+
+.title{
+  text-align:center;
+  font-size:28px;
+  font-weight:bold;
+  color:#ff4d6d;
+}
+
+.subtitle{
+  text-align:center;
+  color:#777;
+  margin-top:5px;
+  margin-bottom:22px;
 }
 
 input{
   width:100%;
-  padding:13px;
-  margin:8px 0;
-  border-radius:12px;
+  padding:14px;
+  border-radius:14px;
   border:1px solid #ddd;
+  margin-bottom:14px;
   outline:none;
-  font-size:12px;
+  font-size:15px;
+  transition:0.3s;
 }
 
 input:focus{
-  border-color:#4facfe;
+  border-color:#ff4d6d;
+  box-shadow:0 0 0 4px rgba(255,77,109,0.15);
 }
 
 button{
   width:100%;
-  padding:13px;
+  padding:14px;
   border:none;
-  border-radius:12px;
-  background:#4facfe;
+  border-radius:14px;
+  background:#ff4d6d;
   color:white;
-  font-size:12px;
+  font-size:16px;
   cursor:pointer;
-  margin-top:10px;
   transition:0.3s;
+  font-weight:bold;
 }
 
 button:hover{
-  background:#007bff;
+  background:#ff1e4d;
 }
 
-.divider{
+.switch{
   text-align:center;
-  margin:18px 0;
-  color:#888;
-  font-size:12px;
-  position:relative;
+  margin-top:18px;
+  color:#666;
+  font-size:14px;
 }
 
-.divider::before,
-.divider::after{
-  content:"";
-  position:absolute;
-  width:35%;
-  height:1px;
-  background:#ddd;
-  top:50%;
-}
-
-.divider::before{
-  left:0;
-}
-
-.divider::after{
-  right:0;
-}
-
-.social-btn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  background:#fff;
-  color:#333;
-  border:1px solid #ddd;
-  margin-top:10px;
-}
-
-.social-btn img{
-  width:22px;
-  height:22px;
+.switch span{
+  color:#ff4d6d;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .msg{
   text-align:center;
-  margin-top:10px;
+  margin-top:12px;
   font-size:14px;
 }
+
+#loginPage{
+  display:none;
+}
+
 </style>
 </head>
 
@@ -123,125 +119,212 @@ button:hover{
 
 <div class="container">
 
-  <h2>Create Account</h2>
+  <!-- SIGNUP -->
+  <div id="signupPage">
 
-  <input type="text" id="name" placeholder="Full Name">
-  <input type="text" id="mobile" placeholder="Mobile Number">
-  <input type="password" id="password" placeholder="Password">
+    <div class="heart">💖</div>
 
-  <button onclick="signup()">Sign Up</button>
+    <div class="title">Love Signup</div>
 
-  <div class="divider">OR</div>
+    <div class="subtitle">
+      Create your love account
+    </div>
 
-  <!-- GOOGLE -->
-  <button class="social-btn" onclick="googleLogin()">
-    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
-    Continue with Google
-  </button>
+    <input type="text"
+    id="loverName"
+    placeholder="Lover Name">
 
-  <!-- FACEBOOK -->
-  <button class="social-btn" onclick="facebookLogin()">
-    <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png">
-    Continue with Facebook
-  </button>
+    <input type="text"
+    id="boyfriendName"
+    placeholder="Boyfriend Name">
 
-  <div class="msg" id="msg"></div>
+    <input type="password"
+    id="signupPassword"
+    placeholder="Password">
+
+    <button onclick="signup()">
+      Sign Up
+    </button>
+
+    <div class="switch">
+      I already have an account?
+      <span onclick="showLogin()">
+        Login
+      </span>
+    </div>
+
+    <div class="msg" id="signupMsg"></div>
+
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginPage">
+
+    <div class="heart">💕</div>
+
+    <div class="title">Love Login</div>
+
+    <div class="subtitle">
+      Welcome back lovers
+    </div>
+
+    <input type="text"
+    id="loginLover"
+    placeholder="Lover Name">
+
+    <input type="password"
+    id="loginPassword"
+    placeholder="Password">
+
+    <button onclick="login()">
+      Login
+    </button>
+
+    <div class="switch">
+      Create new account?
+      <span onclick="showSignup()">
+        Sign Up
+      </span>
+    </div>
+
+    <div class="msg" id="loginMsg"></div>
+
+  </div>
 
 </div>
 
 <script>
-const SUPABASE_URL = "https://fconiqhkfsoexqbieydq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_wVA-NALwoRLpqXiWhrPcTw_m584IYRD";
 
-const supabaseClient = supabase.createClient(
+/* SUPABASE */
+const SUPABASE_URL =
+"https://fconiqhkfsoexqbieydq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_wVA-NALwoRLpqXiWhrPcTw_m584IYRD;
+
+const supabaseClient =
+supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
 
-// NORMAL SIGNUP
+/* SWITCH */
+function showLogin(){
+
+  document.getElementById("signupPage")
+  .style.display="none";
+
+  document.getElementById("loginPage")
+  .style.display="block";
+}
+
+function showSignup(){
+
+  document.getElementById("loginPage")
+  .style.display="none";
+
+  document.getElementById("signupPage")
+  .style.display="block";
+}
+
+/* SIGNUP */
 async function signup(){
 
-  const name = document.getElementById("name").value;
-  const mobile = document.getElementById("mobile").value;
-  const password = document.getElementById("password").value;
+  const loverName =
+  document.getElementById("loverName").value;
 
-  const msg = document.getElementById("msg");
+  const boyfriendName =
+  document.getElementById("boyfriendName").value;
 
-  if(!name || !mobile || !password){
+  const password =
+  document.getElementById("signupPassword").value;
+
+  const msg =
+  document.getElementById("signupMsg");
+
+  if(!loverName || !boyfriendName || !password){
+
     msg.style.color="red";
-    msg.innerText="Please fill all fields";
+
+    msg.innerText=
+    "Please fill all fields";
+
     return;
   }
 
-  const { error } = await supabaseClient
-    .from("users")
-    .insert([
-      {
-        name:name,
-        mobile_number:mobile,
-        password:password,
-        provider:"manual"
-      }
-    ]);
+  const { error } =
+  await supabaseClient
+  .from("lovers")
+  .insert([
+    {
+      lover_name:loverName,
+      boyfriend_name:boyfriendName,
+      password:password
+    }
+  ]);
 
   if(error){
+
     msg.style.color="red";
     msg.innerText=error.message;
+
   }else{
+
     msg.style.color="green";
-    msg.innerText="Signup successful!";
-  }
-}
+    msg.innerText=
+    "Love account created 💖";
 
-// GOOGLE LOGIN
-async function googleLogin(){
+    setTimeout(()=>{
+      showLogin();
+    },1000);
 
-  await supabaseClient.auth.signInWithOAuth({
-    provider: 'google',
-    options:{
-      redirectTo: window.location.href
-    }
-  });
-
-}
-
-// FACEBOOK LOGIN
-async function facebookLogin(){
-
-  await supabaseClient.auth.signInWithOAuth({
-    provider: 'facebook',
-    options:{
-      redirectTo: window.location.href
-    }
-  });
-
-}
-
-// SAVE SOCIAL USER DATA
-async function saveUser(){
-
-  const { data:{user} } = await supabaseClient.auth.getUser();
-
-  if(user){
-
-    await supabaseClient
-      .from("users")
-      .upsert([
-        {
-          email:user.email,
-          name:user.user_metadata.full_name,
-          provider:user.app_metadata.provider
-        }
-      ]);
-
-    document.getElementById("msg").style.color="green";
-    document.getElementById("msg").innerText =
-      "Logged in as " + user.email;
   }
 
 }
 
-saveUser();
+/* LOGIN */
+async function login(){
+
+  const lover =
+  document.getElementById("loginLover").value;
+
+  const password =
+  document.getElementById("loginPassword").value;
+
+  const msg =
+  document.getElementById("loginMsg");
+
+  const { data,error } =
+  await supabaseClient
+  .from("lovers")
+  .select("*")
+  .eq("lover_name",lover)
+  .eq("password",password)
+  .single();
+
+  if(error || !data){
+
+    msg.style.color="red";
+
+    msg.innerText=
+    "Invalid lover name or password";
+
+  }else{
+
+    msg.style.color="green";
+
+    msg.innerText=
+    "Login successful 💕";
+
+    localStorage.setItem(
+      "loverUser",
+      JSON.stringify(data)
+    );
+
+  }
+
+}
+
 </script>
 
 </body>

@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Love Login</title>
+<title>Love Signup Login</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
@@ -30,23 +31,22 @@ body{
   width:90%;
   max-width:380px;
   background:white;
-  padding:28px;
   border-radius:25px;
+  padding:28px;
   box-shadow:0 15px 40px rgba(0,0,0,0.2);
-  position:relative;
 }
 
 .heart{
   text-align:center;
-  font-size:55px;
+  font-size:60px;
   margin-bottom:10px;
 }
 
 .title{
   text-align:center;
   font-size:28px;
-  font-weight:bold;
   color:#ff4d6d;
+  font-weight:bold;
 }
 
 .subtitle{
@@ -64,7 +64,6 @@ input{
   margin-bottom:14px;
   outline:none;
   font-size:15px;
-  transition:0.3s;
 }
 
 input:focus{
@@ -106,6 +105,7 @@ button:hover{
   text-align:center;
   margin-top:12px;
   font-size:14px;
+  min-height:20px;
 }
 
 #loginPage{
@@ -124,21 +124,26 @@ button:hover{
 
     <div class="heart">💖</div>
 
-    <div class="title">Love Signup</div>
+    <div class="title">
+      Love Signup
+    </div>
 
     <div class="subtitle">
       Create your love account
     </div>
 
-    <input type="text"
+    <input
+    type="text"
     id="loverName"
     placeholder="Lover Name">
 
-    <input type="text"
+    <input
+    type="text"
     id="boyfriendName"
     placeholder="Boyfriend Name">
 
-    <input type="password"
+    <input
+    type="password"
     id="signupPassword"
     placeholder="Password">
 
@@ -147,7 +152,7 @@ button:hover{
     </button>
 
     <div class="switch">
-      I already have an account?
+      Already have an account?
       <span onclick="showLogin()">
         Login
       </span>
@@ -162,17 +167,21 @@ button:hover{
 
     <div class="heart">💕</div>
 
-    <div class="title">Love Login</div>
+    <div class="title">
+      Love Login
+    </div>
 
     <div class="subtitle">
       Welcome back lovers
     </div>
 
-    <input type="text"
+    <input
+    type="text"
     id="loginLover"
     placeholder="Lover Name">
 
-    <input type="password"
+    <input
+    type="password"
     id="loginPassword"
     placeholder="Password">
 
@@ -196,11 +205,12 @@ button:hover{
 <script>
 
 /* SUPABASE */
+
 const SUPABASE_URL =
 "https://fconiqhkfsoexqbieydq.supabase.co";
 
 const SUPABASE_ANON_KEY =
-"sb_publishable_wVA-NALwoRLpqXiWhrPcTw_m584IYRD;
+"sb_publishable_wVA-NALwoRLpqXiWhrPcTw_m584IYRD";
 
 const supabaseClient =
 supabase.createClient(
@@ -208,7 +218,8 @@ supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
-/* SWITCH */
+/* PAGE SWITCH */
+
 function showLogin(){
 
   document.getElementById("signupPage")
@@ -228,21 +239,31 @@ function showSignup(){
 }
 
 /* SIGNUP */
+
 async function signup(){
 
   const loverName =
-  document.getElementById("loverName").value;
+  document.getElementById("loverName")
+  .value.trim();
 
   const boyfriendName =
-  document.getElementById("boyfriendName").value;
+  document.getElementById("boyfriendName")
+  .value.trim();
 
   const password =
-  document.getElementById("signupPassword").value;
+  document.getElementById("signupPassword")
+  .value.trim();
 
   const msg =
   document.getElementById("signupMsg");
 
-  if(!loverName || !boyfriendName || !password){
+  msg.innerText = "";
+
+  if(
+    !loverName ||
+    !boyfriendName ||
+    !password
+  ){
 
     msg.style.color="red";
 
@@ -252,7 +273,7 @@ async function signup(){
     return;
   }
 
-  const { error } =
+  const { data,error } =
   await supabaseClient
   .from("lovers")
   .insert([
@@ -261,35 +282,57 @@ async function signup(){
       boyfriend_name:boyfriendName,
       password:password
     }
-  ]);
+  ])
+  .select();
 
   if(error){
 
+    console.log(error);
+
     msg.style.color="red";
-    msg.innerText=error.message;
+
+    msg.innerText=
+    error.message;
 
   }else{
 
-    msg.style.color="green";
-    msg.innerText=
-    "Love account created 💖";
+    console.log(data);
 
+    msg.style.color="green";
+
+    msg.innerText=
+    "Signup successful 💖";
+
+    // CLEAR INPUTS
+    document.getElementById("loverName")
+    .value="";
+
+    document.getElementById("boyfriendName")
+    .value="";
+
+    document.getElementById("signupPassword")
+    .value="";
+
+    // GO LOGIN
     setTimeout(()=>{
       showLogin();
-    },1000);
+    },1500);
 
   }
 
 }
 
 /* LOGIN */
+
 async function login(){
 
   const lover =
-  document.getElementById("loginLover").value;
+  document.getElementById("loginLover")
+  .value.trim();
 
   const password =
-  document.getElementById("loginPassword").value;
+  document.getElementById("loginPassword")
+  .value.trim();
 
   const msg =
   document.getElementById("loginMsg");

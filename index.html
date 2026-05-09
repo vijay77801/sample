@@ -211,7 +211,7 @@ button{
   line-height:1.5;
 }
 
-/* CALL BUTTON */
+/* BOOK BUTTON */
 
 .call-btn{
   display:inline-block;
@@ -223,12 +223,6 @@ button{
   border-radius:30px;
   font-weight:bold;
   animation:pulse 1.5s infinite;
-  transition:0.3s;
-}
-
-.call-btn:hover{
-  background:#009e7f;
-  transform:scale(1.05);
 }
 
 @keyframes pulse{
@@ -461,133 +455,117 @@ Our Hospital Facilities
 
 <div class="cards">
 
-<!-- CARD 1 -->
+<!-- CARD -->
 
 <div class="card">
-
 <img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
-
 <h3>Emergency Care</h3>
 
 <p>
 24/7 emergency ambulance and trauma services.
 </p>
 
-<a href="tel:+919876543210"
-class="call-btn">
-📞 Call Now
+<a href="#"
+class="call-btn"
+onclick="bookAppointment('Emergency Care')">
+📅 Book Appointment
 </a>
 
 </div>
 </div>
 
-<!-- CARD 2 -->
-
 <div class="card">
-
 <img src="https://images.pexels.com/photos/247786/pexels-photo-247786.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
-
 <h3>ICU & Critical Care</h3>
 
 <p>
 Advanced ICU with specialist doctors.
 </p>
 
-<a href="tel:+919876543210"
-class="call-btn">
-📞 Call Now
+<a href="#"
+class="call-btn"
+onclick="bookAppointment('ICU & Critical Care')">
+📅 Book Appointment
 </a>
 
 </div>
 </div>
 
-<!-- CARD 3 -->
-
 <div class="card">
-
 <img src="https://images.pexels.com/photos/305568/pexels-photo-305568.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
-
 <h3>Operation Theatre</h3>
 
 <p>
 Modern surgical operation theatres.
 </p>
 
-<a href="tel:+919876543210"
-class="call-btn">
-📞 Call Now
+<a href="#"
+class="call-btn"
+onclick="bookAppointment('Operation Theatre')">
+📅 Book Appointment
 </a>
 
 </div>
 </div>
 
-<!-- CARD 4 -->
-
 <div class="card">
-
 <img src="https://images.pexels.com/photos/1170979/pexels-photo-1170979.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
-
 <h3>Laboratory</h3>
 
 <p>
 Accurate diagnostic laboratory reports.
 </p>
 
-<a href="tel:+919876543210"
-class="call-btn">
-📞 Call Now
+<a href="#"
+class="call-btn"
+onclick="bookAppointment('Laboratory')">
+📅 Book Appointment
 </a>
 
 </div>
 </div>
 
-<!-- CARD 5 -->
-
 <div class="card">
-
 <img src="https://images.pexels.com/photos/208512/pexels-photo-208512.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
-
 <h3>Pharmacy</h3>
 
 <p>
 24-hour medicine and pharmacy support.
 </p>
 
-<a href="tel:+919876543210"
-class="call-btn">
-📞 Call Now
+<a href="#"
+class="call-btn"
+onclick="bookAppointment('Pharmacy')">
+📅 Book Appointment
 </a>
 
 </div>
 </div>
 
-<!-- CARD 6 -->
-
 <div class="card">
-
 <img src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
-
 <h3>Doctor Consultation</h3>
 
 <p>
 Experienced doctors for multiple departments.
 </p>
 
-<a href="tel:+919876543210"
-class="call-btn">
-📞 Call Now
+<a href="#"
+class="call-btn"
+onclick="bookAppointment('Doctor Consultation')">
+📅 Book Appointment
 </a>
 
 </div>
@@ -640,12 +618,10 @@ Logout
 function signup(){
 
 const username =
-document.getElementById("signupUsername")
-.value.trim();
+document.getElementById("signupUsername").value.trim();
 
 const mobile =
-document.getElementById("signupMobile")
-.value.trim();
+document.getElementById("signupMobile").value.trim();
 
 const msg =
 document.getElementById("signupMsg");
@@ -653,10 +629,7 @@ document.getElementById("signupMsg");
 if(!username || !mobile){
 
 msg.style.color="red";
-
-msg.innerText=
-"Please fill all fields";
-
+msg.innerText="Please fill all fields";
 return;
 
 }
@@ -672,9 +645,7 @@ JSON.stringify(user)
 );
 
 msg.style.color="green";
-
-msg.innerText=
-"Signup successful ✅";
+msg.innerText="Signup successful ✅";
 
 setTimeout(()=>{
 showLogin();
@@ -687,12 +658,10 @@ showLogin();
 function login(){
 
 const username =
-document.getElementById("loginUsername")
-.value.trim();
+document.getElementById("loginUsername").value.trim();
 
 const mobile =
-document.getElementById("loginMobile")
-.value.trim();
+document.getElementById("loginMobile").value.trim();
 
 const msg =
 document.getElementById("loginMsg");
@@ -709,9 +678,7 @@ savedUser.mobile === mobile
 ){
 
 msg.style.color="green";
-
-msg.innerText=
-"Login successful 💙";
+msg.innerText="Login successful 💙";
 
 document.getElementById("profileName")
 .innerText = savedUser.username;
@@ -735,9 +702,7 @@ document.getElementById("homePage")
 }else{
 
 msg.style.color="red";
-
-msg.innerText=
-"Invalid account details";
+msg.innerText="Invalid account details";
 
 }
 
@@ -751,14 +716,75 @@ const popup =
 document.getElementById("profilePopup");
 
 if(popup.style.display==="block"){
-
 popup.style.display="none";
-
 }else{
-
 popup.style.display="block";
+}
 
 }
+
+/* BOOK APPOINTMENT */
+
+function bookAppointment(service){
+
+const savedUser =
+JSON.parse(
+localStorage.getItem("hospitalUser")
+);
+
+const appointmentNumber =
+"APT" + Math.floor(
+100000 + Math.random() * 900000
+);
+
+const today =
+new Date();
+
+const date =
+today.toLocaleDateString();
+
+const time =
+today.toLocaleTimeString();
+
+const hospitalAddress =
+"Subbarao Hospital, Razole, Andhra Pradesh, India";
+
+const mapsLink =
+"https://maps.google.com/?q=Razole+Andhra+Pradesh";
+
+const whatsappNumber =
+"919876543210";
+
+const message =
+
+`🏥 Subbarao Hospital Appointment
+
+👤 Patient Name: ${savedUser.username}
+
+📱 Mobile: ${savedUser.mobile}
+
+🩺 Service: ${service}
+
+🆔 Appointment No: ${appointmentNumber}
+
+📅 Date: ${date}
+
+⏰ Time: ${time}
+
+📍 Hospital Address:
+${hospitalAddress}
+
+🗺 Google Maps:
+${mapsLink}`;
+
+const whatsappURL =
+
+`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+window.open(
+whatsappURL,
+"_blank"
+);
 
 }
 

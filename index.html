@@ -19,7 +19,7 @@ body{
   overflow-x:hidden;
 }
 
-/* AUTH */
+/* LOGIN & SIGNUP */
 
 .auth-container{
   height:100vh;
@@ -59,7 +59,7 @@ body{
   margin-bottom:25px;
 }
 
-input{
+input,select{
   width:100%;
   padding:14px;
   border-radius:14px;
@@ -105,7 +105,7 @@ button{
   display:none;
 }
 
-/* HOME */
+/* HOME PAGE */
 
 #homePage{
   display:none;
@@ -138,10 +138,6 @@ button{
   font-size:28px;
 }
 
-#profileName{
-  font-weight:bold;
-}
-
 .profile-popup{
   position:absolute;
   top:90px;
@@ -159,10 +155,6 @@ button{
 .profile-popup h3{
   color:#0077ff;
   margin-bottom:12px;
-}
-
-.profile-popup p{
-  margin-bottom:10px;
 }
 
 /* FACILITIES */
@@ -244,10 +236,46 @@ button{
 
 }
 
+/* APPOINTMENT POPUP */
+
+.appointment-popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:5000;
+  padding:15px;
+}
+
+.appointment-box{
+  width:100%;
+  max-width:420px;
+  background:white;
+  border-radius:25px;
+  padding:25px;
+}
+
+.appointment-box h2{
+  text-align:center;
+  color:#0077ff;
+  margin-bottom:20px;
+}
+
+.close-btn{
+  margin-top:10px;
+  background:#ff4d4d;
+}
+
 /* LOCATION */
 
 .location-section{
   margin-top:40px;
+  padding:20px;
 }
 
 .location-card{
@@ -257,27 +285,11 @@ button{
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
 
-.location-card h3{
-  color:#0077ff;
-  margin-bottom:12px;
-}
-
-.location-card p{
-  color:#666;
-  margin-bottom:15px;
-}
-
-/* LOGOUT */
-
 .logout-btn{
   max-width:250px;
   margin:30px auto;
   display:block;
   background:#ff4d4d;
-}
-
-.logout-btn:hover{
-  background:#e60000;
 }
 
 /* MOBILE */
@@ -293,27 +305,13 @@ button{
     gap:15px;
   }
 
-  .header h1{
-    font-size:24px;
-    text-align:center;
-  }
-
-  .header p{
-    text-align:center;
-  }
-
-  .profile-popup{
-    right:10px;
-    width:220px;
-  }
-
 }
 
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
+<!-- LOGIN & SIGNUP -->
 
 <div class="auth-container" id="authSection">
 
@@ -333,22 +331,16 @@ Subbarao Hospital
 Create your account
 </div>
 
-<input
-type="text"
-id="signupUsername"
-placeholder="Username">
+<input type="text" id="signupUsername" placeholder="Username">
 
-<input
-type="text"
-id="signupMobile"
-placeholder="Mobile Number">
+<input type="text" id="signupMobile" placeholder="WhatsApp Number">
 
 <button onclick="signup()">
 Sign Up
 </button>
 
 <div class="switch">
-I already have an account?
+Already have an account?
 <span onclick="showLogin()">
 Login
 </span>
@@ -372,15 +364,9 @@ Welcome Back
 Login to continue
 </div>
 
-<input
-type="text"
-id="loginUsername"
-placeholder="Username">
+<input type="text" id="loginUsername" placeholder="Username">
 
-<input
-type="text"
-id="loginMobile"
-placeholder="Mobile Number">
+<input type="text" id="loginMobile" placeholder="WhatsApp Number">
 
 <button onclick="login()">
 Login
@@ -400,7 +386,7 @@ Sign Up
 </div>
 </div>
 
-<!-- HOME -->
+<!-- HOME PAGE -->
 
 <div id="homePage">
 
@@ -455,12 +441,14 @@ Our Hospital Facilities
 
 <div class="cards">
 
-<!-- CARD -->
+<!-- CARD 1 -->
 
 <div class="card">
+
 <img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
+
 <h3>Emergency Care</h3>
 
 <p>
@@ -469,17 +457,21 @@ Our Hospital Facilities
 
 <a href="#"
 class="call-btn"
-onclick="bookAppointment('Emergency Care')">
+onclick="openAppointmentForm('Emergency Care')">
 📅 Book Appointment
 </a>
 
 </div>
 </div>
 
+<!-- CARD 2 -->
+
 <div class="card">
+
 <img src="https://images.pexels.com/photos/247786/pexels-photo-247786.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
+
 <h3>ICU & Critical Care</h3>
 
 <p>
@@ -488,17 +480,21 @@ Advanced ICU with specialist doctors.
 
 <a href="#"
 class="call-btn"
-onclick="bookAppointment('ICU & Critical Care')">
+onclick="openAppointmentForm('ICU & Critical Care')">
 📅 Book Appointment
 </a>
 
 </div>
 </div>
 
+<!-- CARD 3 -->
+
 <div class="card">
+
 <img src="https://images.pexels.com/photos/305568/pexels-photo-305568.jpeg?auto=compress&cs=tinysrgb&w=1200">
 
 <div class="card-content">
+
 <h3>Operation Theatre</h3>
 
 <p>
@@ -507,68 +503,86 @@ Modern surgical operation theatres.
 
 <a href="#"
 class="call-btn"
-onclick="bookAppointment('Operation Theatre')">
+onclick="openAppointmentForm('Operation Theatre')">
 📅 Book Appointment
 </a>
 
 </div>
 </div>
 
-<div class="card">
-<img src="https://images.pexels.com/photos/1170979/pexels-photo-1170979.jpeg?auto=compress&cs=tinysrgb&w=1200">
+</div>
 
-<div class="card-content">
-<h3>Laboratory</h3>
+</div>
 
-<p>
-Accurate diagnostic laboratory reports.
-</p>
+<!-- APPOINTMENT POPUP -->
 
-<a href="#"
-class="call-btn"
-onclick="bookAppointment('Laboratory')">
+<div class="appointment-popup"
+id="appointmentPopup">
+
+<div class="appointment-box">
+
+<h2>
 📅 Book Appointment
-</a>
+</h2>
 
-</div>
-</div>
+<input
+type="text"
+id="patientName"
+placeholder="Patient Name">
 
-<div class="card">
-<img src="https://images.pexels.com/photos/208512/pexels-photo-208512.jpeg?auto=compress&cs=tinysrgb&w=1200">
+<input
+type="number"
+id="patientAge"
+placeholder="Patient Age">
 
-<div class="card-content">
-<h3>Pharmacy</h3>
+<input
+type="text"
+id="patientDisease"
+placeholder="Disease / Problem">
 
-<p>
-24-hour medicine and pharmacy support.
-</p>
+<select id="paymentMode">
 
-<a href="#"
-class="call-btn"
-onclick="bookAppointment('Pharmacy')">
-📅 Book Appointment
-</a>
+<option value="">
+Select Payment Mode
+</option>
 
-</div>
-</div>
+<option>
+Cash
+</option>
 
-<div class="card">
-<img src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=1200">
+<option>
+PhonePe
+</option>
 
-<div class="card-content">
-<h3>Doctor Consultation</h3>
+<option>
+Google Pay
+</option>
 
-<p>
-Experienced doctors for multiple departments.
-</p>
+<option>
+Paytm
+</option>
 
-<a href="#"
-class="call-btn"
-onclick="bookAppointment('Doctor Consultation')">
-📅 Book Appointment
-</a>
+<option>
+Card
+</option>
 
-</div>
+</select>
+
+<input
+type="text"
+id="selectedService"
+readonly>
+
+<button onclick="submitAppointment()">
+Confirm Appointment
+</button>
+
+<button
+class="close-btn"
+onclick="closeAppointmentForm()">
+Close
+</button>
+
 </div>
 
 </div>
@@ -606,8 +620,6 @@ src="https://maps.google.com/maps?q=Razole%20Andhra%20Pradesh&t=&z=13&ie=UTF8&iw
 onclick="logout()">
 Logout
 </button>
-
-</div>
 
 </div>
 
@@ -723,68 +735,174 @@ popup.style.display="block";
 
 }
 
-/* BOOK APPOINTMENT */
+/* APPOINTMENT */
 
-function bookAppointment(service){
+let currentService = "";
+
+function openAppointmentForm(service){
+
+currentService = service;
+
+document.getElementById("appointmentPopup")
+.style.display="flex";
+
+document.getElementById("selectedService")
+.value = "Department: " + service;
+
+}
+
+function closeAppointmentForm(){
+
+document.getElementById("appointmentPopup")
+.style.display="none";
+
+}
+
+/* CONFIRM APPOINTMENT */
+
+function submitAppointment(){
 
 const savedUser =
 JSON.parse(
 localStorage.getItem("hospitalUser")
 );
 
-const appointmentNumber =
-"APT" + Math.floor(
-100000 + Math.random() * 900000
+const patientName =
+document.getElementById("patientName").value;
+
+const patientAge =
+document.getElementById("patientAge").value;
+
+const disease =
+document.getElementById("patientDisease").value;
+
+const paymentMode =
+document.getElementById("paymentMode").value;
+
+if(
+!patientName ||
+!patientAge ||
+!disease ||
+!paymentMode
+){
+
+alert("Please fill all details");
+return;
+
+}
+
+/* TOKEN */
+
+const tokenNumber =
+"TOKEN-" + Math.floor(
+1000 + Math.random() * 9000
 );
+
+/* DATE */
 
 const today =
 new Date();
 
-const date =
+const appointmentDate =
 today.toLocaleDateString();
 
-const time =
+const appointmentTime =
 today.toLocaleTimeString();
 
+/* CHECK IN */
+
+const checkInTime =
+"09:30 AM";
+
+/* CHECK OUT */
+
+const checkOutTime =
+"11:00 AM";
+
+/* HOSPITAL */
+
 const hospitalAddress =
-"Subbarao Hospital, Razole, Andhra Pradesh, India";
+"Subbarao Hospital, Razole, Andhra Pradesh";
 
 const mapsLink =
 "https://maps.google.com/?q=Razole+Andhra+Pradesh";
 
-const whatsappNumber =
-"919876543210";
+/* USER WHATSAPP */
+
+const userWhatsapp =
+savedUser.mobile;
+
+/* MESSAGE */
 
 const message =
 
-`🏥 Subbarao Hospital Appointment
+`🏥 SUBBARAO HOSPITAL
 
-👤 Patient Name: ${savedUser.username}
+✅ APPOINTMENT CONFIRMED
 
-📱 Mobile: ${savedUser.mobile}
+🎟 Token Number:
+${tokenNumber}
 
-🩺 Service: ${service}
+👤 Patient Name:
+${patientName}
 
-🆔 Appointment No: ${appointmentNumber}
+📱 Mobile:
+${savedUser.mobile}
 
-📅 Date: ${date}
+🎂 Age:
+${patientAge}
 
-⏰ Time: ${time}
+🦠 Disease:
+${disease}
+
+🩺 Department:
+${currentService}
+
+💳 Payment Mode:
+${paymentMode}
+
+📅 Appointment Date:
+${appointmentDate}
+
+⏰ Appointment Time:
+${appointmentTime}
+
+🟢 Check-In Time:
+${checkInTime}
+
+🔴 Check-Out Time:
+${checkOutTime}
 
 📍 Hospital Address:
 ${hospitalAddress}
 
 🗺 Google Maps:
-${mapsLink}`;
+${mapsLink}
+
+🙏 Please arrive 15 minutes early.`;
+
+/* OPEN WHATSAPP */
 
 const whatsappURL =
-
-`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+`https://wa.me/91${userWhatsapp}?text=${encodeURIComponent(message)}`;
 
 window.open(
 whatsappURL,
 "_blank"
 );
+
+alert("Appointment Confirmed ✅");
+
+/* CLOSE FORM */
+
+closeAppointmentForm();
+
+/* CLEAR FORM */
+
+document.getElementById("patientName").value="";
+document.getElementById("patientAge").value="";
+document.getElementById("patientDisease").value="";
+document.getElementById("paymentMode").value="";
 
 }
 

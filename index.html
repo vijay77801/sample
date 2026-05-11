@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>Subbarao Hospital</title>
 
 <style>
@@ -17,6 +19,138 @@
 body{
   background:#f4f7fb;
   overflow-x:hidden;
+}
+
+/* ADMIN TOGGLE */
+
+.admin-toggle{
+  position:fixed;
+  top:20px;
+  left:20px;
+  width:55px;
+  height:55px;
+  background:#0077ff;
+  color:white;
+  font-size:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:15px;
+  cursor:pointer;
+  z-index:9999;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* ADMIN LOGIN */
+
+.admin-login-popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:10000;
+  padding:15px;
+}
+
+.admin-login-box{
+  width:100%;
+  max-width:380px;
+  background:white;
+  padding:25px;
+  border-radius:25px;
+}
+
+.admin-login-box h2{
+  text-align:center;
+  color:#0077ff;
+  margin-bottom:20px;
+}
+
+.close-admin-btn{
+  margin-top:10px;
+  background:#ff4d4d;
+}
+
+/* ADMIN PANEL */
+
+.admin-panel{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:100%;
+  max-width:420px;
+  height:100%;
+  background:#f4f7fb;
+  z-index:9998;
+  overflow-y:auto;
+  transition:0.4s;
+  padding:20px;
+}
+
+.admin-panel.active{
+  left:0;
+}
+
+.admin-sidebar{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+.admin-sidebar h2{
+  color:#0077ff;
+  margin-bottom:20px;
+}
+
+.admin-menu{
+  padding:14px;
+  border-radius:14px;
+  background:#f1f5ff;
+  margin-bottom:12px;
+  font-weight:bold;
+}
+
+.admin-menu.active{
+  background:#0077ff;
+  color:white;
+}
+
+.admin-title{
+  color:#0077ff;
+  margin-bottom:20px;
+}
+
+.admin-receipt{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+.admin-receipt h3{
+  color:#0077ff;
+  margin-bottom:15px;
+}
+
+.admin-row{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+  gap:10px;
+}
+
+.admin-label{
+  font-weight:bold;
+  color:#0077ff;
 }
 
 /* LOGIN */
@@ -84,8 +218,6 @@ button{
 .switch{
   text-align:center;
   margin-top:18px;
-  color:#555;
-  font-size:14px;
 }
 
 .switch span{
@@ -97,8 +229,6 @@ button{
 .msg{
   text-align:center;
   margin-top:12px;
-  font-size:14px;
-  min-height:20px;
 }
 
 #loginPage{
@@ -115,7 +245,6 @@ button{
   background:linear-gradient(135deg,#0077ff,#00bfff);
   color:white;
   padding:20px;
-  position:relative;
 }
 
 .topbar{
@@ -135,30 +264,14 @@ button{
   cursor:pointer;
 }
 
-.profile-icon{
-  font-size:28px;
-}
-
 .profile-popup{
-  position:absolute;
-  top:90px;
-  right:20px;
-  width:240px;
   background:white;
   color:#333;
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  padding:15px;
+  border-radius:15px;
+  margin-top:15px;
   display:none;
-  z-index:1000;
 }
-
-.profile-popup h3{
-  color:#0077ff;
-  margin-bottom:12px;
-}
-
-/* SERVICES */
 
 .facilities{
   padding:20px;
@@ -199,11 +312,6 @@ button{
   margin-bottom:10px;
 }
 
-.card-content p{
-  color:#666;
-  line-height:1.5;
-}
-
 .call-btn{
   display:inline-block;
   margin-top:14px;
@@ -213,29 +321,7 @@ button{
   text-decoration:none;
   border-radius:30px;
   font-weight:bold;
-  animation:pulse 1.5s infinite;
 }
-
-@keyframes pulse{
-
-  0%{
-    transform:scale(1);
-    box-shadow:0 0 0 0 rgba(0,184,148,0.6);
-  }
-
-  70%{
-    transform:scale(1.05);
-    box-shadow:0 0 0 15px rgba(0,184,148,0);
-  }
-
-  100%{
-    transform:scale(1);
-    box-shadow:0 0 0 0 rgba(0,184,148,0);
-  }
-
-}
-
-/* APPOINTMENT */
 
 .appointment-popup{
   position:fixed;
@@ -259,18 +345,10 @@ button{
   padding:25px;
 }
 
-.appointment-box h2{
-  text-align:center;
-  color:#0077ff;
-  margin-bottom:20px;
-}
-
 .close-btn{
   margin-top:10px;
   background:#ff4d4d;
 }
-
-/* RECEIPT */
 
 .receipt{
   background:white;
@@ -287,21 +365,19 @@ button{
   margin-bottom:20px;
 }
 
-.receipt p{
-  margin-bottom:10px;
-  color:#333;
-  line-height:1.6;
+.receipt-row{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid #eee;
 }
 
-.whatsapp-btn{
-  margin-top:20px;
-  background:#25D366;
+.receipt-label{
+  font-weight:bold;
+  color:#0077ff;
 }
-
-/* LOCATION */
 
 .location-section{
-  margin-top:40px;
   padding:20px;
 }
 
@@ -319,17 +395,23 @@ button{
   background:#ff4d4d;
 }
 
-/* MOBILE */
-
 @media(max-width:768px){
 
-  .cards{
-    grid-template-columns:1fr;
-  }
+.cards{
+grid-template-columns:1fr;
+}
 
-  .topbar{
-    flex-direction:column;
-  }
+.topbar{
+flex-direction:column;
+}
+
+.admin-row{
+flex-direction:column;
+}
+
+.receipt-row{
+flex-direction:column;
+}
 
 }
 
@@ -338,13 +420,92 @@ button{
 
 <body>
 
+<!-- ADMIN TOGGLE -->
+
+<div class="admin-toggle"
+onclick="toggleAdminPanel()">
+
+☰
+
+</div>
+
+<!-- ADMIN LOGIN -->
+
+<div class="admin-login-popup"
+id="adminLoginPopup">
+
+<div class="admin-login-box">
+
+<h2>
+🔐 Admin Login
+</h2>
+
+<input type="text"
+id="adminUser"
+placeholder="Admin Username">
+
+<input type="password"
+id="adminPass"
+placeholder="Admin Password">
+
+<button onclick="adminLogin()">
+Login
+</button>
+
+<button class="close-admin-btn"
+onclick="closeAdminLogin()">
+Close
+</button>
+
+</div>
+
+</div>
+
+<!-- ADMIN PANEL -->
+
+<div class="admin-panel"
+id="adminPanel">
+
+<div class="admin-sidebar">
+
+<h2>
+🏥 Admin Panel
+</h2>
+
+<div class="admin-menu active">
+📅 Appointments
+</div>
+
+<div class="admin-menu">
+👨‍⚕ Patients
+</div>
+
+<div class="admin-menu">
+💊 Services
+</div>
+
+<div class="admin-menu">
+📊 Reports
+</div>
+
+</div>
+
+<h2 class="admin-title">
+📋 Appointment Receipts
+</h2>
+
+<div id="adminAppointments">
+
+</div>
+
+</div>
+
 <!-- LOGIN -->
 
-<div class="auth-container" id="authSection">
+<div class="auth-container"
+id="authSection">
 
 <div class="container">
-
-<!-- SIGNUP -->
 
 <div id="signupPage">
 
@@ -358,9 +519,13 @@ Subbarao Hospital
 Create your account
 </div>
 
-<input type="text" id="signupUsername" placeholder="Username">
+<input type="text"
+id="signupUsername"
+placeholder="Username">
 
-<input type="text" id="signupMobile" placeholder="WhatsApp Number">
+<input type="text"
+id="signupMobile"
+placeholder="WhatsApp Number">
 
 <button onclick="signup()">
 Sign Up
@@ -373,11 +538,10 @@ Login
 </span>
 </div>
 
-<div class="msg" id="signupMsg"></div>
+<div class="msg"
+id="signupMsg"></div>
 
 </div>
-
-<!-- LOGIN -->
 
 <div id="loginPage">
 
@@ -391,9 +555,13 @@ Welcome Back
 Login to continue
 </div>
 
-<input type="text" id="loginUsername" placeholder="Username">
+<input type="text"
+id="loginUsername"
+placeholder="Username">
 
-<input type="text" id="loginMobile" placeholder="WhatsApp Number">
+<input type="text"
+id="loginMobile"
+placeholder="WhatsApp Number">
 
 <button onclick="login()">
 Login
@@ -406,11 +574,13 @@ Sign Up
 </span>
 </div>
 
-<div class="msg" id="loginMsg"></div>
+<div class="msg"
+id="loginMsg"></div>
 
 </div>
 
 </div>
+
 </div>
 
 <!-- HOME -->
@@ -422,14 +592,23 @@ Sign Up
 <div class="topbar">
 
 <div>
-<h1>🏥 Subbarao Hospital</h1>
-<p>Advanced Healthcare & Emergency Services</p>
+
+<h1>
+🏥 Subbarao Hospital
+</h1>
+
+<p>
+Advanced Healthcare Services
+</p>
+
 </div>
 
 <div class="profile-box"
 onclick="toggleProfilePopup()">
 
-<div class="profile-icon">👤</div>
+<div>
+👤
+</div>
 
 <div id="profileName">
 Guest
@@ -442,13 +621,15 @@ Guest
 <div class="profile-popup"
 id="profilePopup">
 
-<h3>👤 User Profile</h3>
+<p>
+<strong>Name:</strong>
+<span id="popupName"></span>
+</p>
 
-<p><strong>Name:</strong>
-<span id="popupName"></span></p>
-
-<p><strong>Phone:</strong>
-<span id="popupPhone"></span></p>
+<p>
+<strong>Phone:</strong>
+<span id="popupPhone"></span>
+</p>
 
 </div>
 
@@ -459,7 +640,7 @@ id="profilePopup">
 <div class="facilities">
 
 <h2 class="section-title">
-Our Hospital Facilities
+Hospital Facilities
 </h2>
 
 <div class="cards">
@@ -470,19 +651,24 @@ Our Hospital Facilities
 
 <div class="card-content">
 
-<h3>Emergency Care</h3>
+<h3>
+Emergency Care
+</h3>
 
 <p>
-24/7 emergency ambulance and trauma services.
+24/7 emergency services
 </p>
 
 <a href="#"
 class="call-btn"
 onclick="openAppointmentForm('Emergency Care')">
+
 📅 Book Appointment
+
 </a>
 
 </div>
+
 </div>
 
 <div class="card">
@@ -491,19 +677,24 @@ onclick="openAppointmentForm('Emergency Care')">
 
 <div class="card-content">
 
-<h3>ICU & Critical Care</h3>
+<h3>
+ICU Care
+</h3>
 
 <p>
-Advanced ICU with specialist doctors.
+Advanced ICU support
 </p>
 
 <a href="#"
 class="call-btn"
-onclick="openAppointmentForm('ICU & Critical Care')">
+onclick="openAppointmentForm('ICU Care')">
+
 📅 Book Appointment
+
 </a>
 
 </div>
+
 </div>
 
 <div class="card">
@@ -512,19 +703,24 @@ onclick="openAppointmentForm('ICU & Critical Care')">
 
 <div class="card-content">
 
-<h3>Operation Theatre</h3>
+<h3>
+Operation Theatre
+</h3>
 
 <p>
-Modern surgical operation theatres.
+Modern operation theatres
 </p>
 
 <a href="#"
 class="call-btn"
 onclick="openAppointmentForm('Operation Theatre')">
+
 📅 Book Appointment
+
 </a>
 
 </div>
+
 </div>
 
 </div>
@@ -552,7 +748,7 @@ placeholder="Patient Age">
 
 <input type="text"
 id="patientDisease"
-placeholder="Disease / Problem">
+placeholder="Disease">
 
 <select id="paymentMode">
 
@@ -564,7 +760,6 @@ Select Payment Mode
 <option>PhonePe</option>
 <option>Google Pay</option>
 <option>Paytm</option>
-<option>Card</option>
 
 </select>
 
@@ -585,7 +780,7 @@ Close
 
 </div>
 
-<!-- RECEIPT -->
+<!-- USER RECEIPT -->
 
 <div class="receipt"
 id="receiptBox">
@@ -595,14 +790,6 @@ id="receiptBox">
 </h2>
 
 <div id="receiptContent"></div>
-
-<button
-class="whatsapp-btn"
-onclick="sendWhatsappReceipt()">
-
-Send Receipt To WhatsApp
-
-</button>
 
 </div>
 
@@ -616,9 +803,13 @@ Send Receipt To WhatsApp
 
 <div class="location-card">
 
-<h3>Subbarao Hospital</h3>
+<h3>
+Subbarao Hospital
+</h3>
 
-<p>Razole, Andhra Pradesh</p>
+<p>
+Razole, Andhra Pradesh
+</p>
 
 <iframe
 width="100%"
@@ -642,9 +833,54 @@ Logout
 
 <script>
 
-/* USER */
-
 let currentUser = null;
+let currentService = "";
+
+/* ADMIN */
+
+function toggleAdminPanel(){
+
+document.getElementById("adminLoginPopup")
+.style.display = "flex";
+
+}
+
+function closeAdminLogin(){
+
+document.getElementById("adminLoginPopup")
+.style.display = "none";
+
+}
+
+function adminLogin(){
+
+const username =
+document.getElementById("adminUser").value;
+
+const password =
+document.getElementById("adminPass").value;
+
+const adminUsername = "admin";
+const adminPassword = "1234";
+
+if(
+username === adminUsername &&
+password === adminPassword
+){
+
+document.getElementById("adminPanel")
+.classList.add("active");
+
+document.getElementById("adminLoginPopup")
+.style.display = "none";
+
+}else{
+
+alert("Invalid Admin Login");
+
+}
+
+}
 
 /* SIGNUP */
 
@@ -659,7 +895,7 @@ document.getElementById("signupMobile").value.trim();
 if(!username || !mobile){
 
 document.getElementById("signupMsg")
-.innerHTML="Fill all fields";
+.innerHTML = "Fill all fields";
 
 return;
 
@@ -676,7 +912,7 @@ JSON.stringify(user)
 );
 
 document.getElementById("signupMsg")
-.innerHTML="Signup Successful ✅";
+.innerHTML = "Signup Successful ✅";
 
 setTimeout(()=>{
 showLogin();
@@ -717,15 +953,15 @@ document.getElementById("popupPhone")
 .innerHTML = mobile;
 
 document.getElementById("authSection")
-.style.display="none";
+.style.display = "none";
 
 document.getElementById("homePage")
-.style.display="block";
+.style.display = "block";
 
 }else{
 
 document.getElementById("loginMsg")
-.innerHTML="Invalid Details ❌";
+.innerHTML = "Invalid Details ❌";
 
 }
 
@@ -736,20 +972,20 @@ document.getElementById("loginMsg")
 function showLogin(){
 
 document.getElementById("signupPage")
-.style.display="none";
+.style.display = "none";
 
 document.getElementById("loginPage")
-.style.display="block";
+.style.display = "block";
 
 }
 
 function showSignup(){
 
 document.getElementById("loginPage")
-.style.display="none";
+.style.display = "none";
 
 document.getElementById("signupPage")
-.style.display="block";
+.style.display = "block";
 
 }
 
@@ -769,15 +1005,12 @@ popup.style.display === "block"
 
 /* APPOINTMENT */
 
-let currentService = "";
-let receiptMessage = "";
-
 function openAppointmentForm(service){
 
 currentService = service;
 
 document.getElementById("appointmentPopup")
-.style.display="flex";
+.style.display = "flex";
 
 document.getElementById("selectedService")
 .value = service;
@@ -787,7 +1020,7 @@ document.getElementById("selectedService")
 function closeAppointmentForm(){
 
 document.getElementById("appointmentPopup")
-.style.display="none";
+.style.display = "none";
 
 }
 
@@ -824,95 +1057,181 @@ const token =
 1000 + Math.random()*9000
 );
 
-const checkIn =
-"09:30 AM";
-
-const checkOut =
-"11:00 AM";
-
 const date =
 new Date().toLocaleDateString();
 
 const time =
 new Date().toLocaleTimeString();
 
-receiptMessage =
+const checkIn =
+"09:30 AM";
 
-`🏥 SUBBARAO HOSPITAL
+const checkOut =
+"11:00 AM";
 
-✅ Appointment Confirmed
-
-🎟 Token:
-${token}
-
-👤 Patient:
-${patientName}
-
-📱 Mobile:
-${currentUser.mobile}
-
-🎂 Age:
-${patientAge}
-
-🦠 Disease:
-${patientDisease}
-
-🩺 Department:
-${currentService}
-
-💳 Payment:
-${paymentMode}
-
-📅 Date:
-${date}
-
-⏰ Time:
-${time}
-
-🟢 Check-In:
-${checkIn}
-
-🔴 Check-Out:
-${checkOut}
-
-📍 Razole, Andhra Pradesh`;
+/* USER RECEIPT */
 
 document.getElementById("receiptContent")
 .innerHTML = `
 
-<p><strong>Token:</strong> ${token}</p>
+<div class="receipt-row">
+<div class="receipt-label">
+Token
+</div>
+<div>
+${token}
+</div>
+</div>
 
-<p><strong>Patient:</strong> ${patientName}</p>
+<div class="receipt-row">
+<div class="receipt-label">
+Patient
+</div>
+<div>
+${patientName}
+</div>
+</div>
 
-<p><strong>Mobile:</strong> ${currentUser.mobile}</p>
+<div class="receipt-row">
+<div class="receipt-label">
+Department
+</div>
+<div>
+${currentService}
+</div>
+</div>
 
-<p><strong>Department:</strong> ${currentService}</p>
-
-<p><strong>Check-In:</strong> ${checkIn}</p>
-
-<p><strong>Check-Out:</strong> ${checkOut}</p>
+<div class="receipt-row">
+<div class="receipt-label">
+Date
+</div>
+<div>
+${date}
+</div>
+</div>
 
 `;
 
 document.getElementById("receiptBox")
-.style.display="block";
+.style.display = "block";
+
+/* ADMIN RECEIPT */
+
+const adminHTML = `
+
+<div class="admin-receipt">
+
+<h3>
+🏥 Appointment Receipt
+</h3>
+
+<div class="admin-row">
+<div class="admin-label">
+Token Number
+</div>
+<div>
+${token}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Patient Name
+</div>
+<div>
+${patientName}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Mobile
+</div>
+<div>
+${currentUser.mobile}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Age
+</div>
+<div>
+${patientAge}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Disease
+</div>
+<div>
+${patientDisease}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Department
+</div>
+<div>
+${currentService}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Payment
+</div>
+<div>
+${paymentMode}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Date
+</div>
+<div>
+${date}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Time
+</div>
+<div>
+${time}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Check-In
+</div>
+<div>
+${checkIn}
+</div>
+</div>
+
+<div class="admin-row">
+<div class="admin-label">
+Check-Out
+</div>
+<div>
+${checkOut}
+</div>
+</div>
+
+</div>
+
+`;
+
+document.getElementById("adminAppointments")
+.innerHTML += adminHTML;
 
 closeAppointmentForm();
-
-}
-
-/* SEND WHATSAPP */
-
-function sendWhatsappReceipt(){
-
-const whatsappURL =
-
-`https://wa.me/91${currentUser.mobile}?text=${encodeURIComponent(receiptMessage)}`;
-
-window.open(
-whatsappURL,
-"_blank"
-);
 
 }
 
@@ -921,10 +1240,10 @@ whatsappURL,
 function logout(){
 
 document.getElementById("homePage")
-.style.display="none";
+.style.display = "none";
 
 document.getElementById("authSection")
-.style.display="flex";
+.style.display = "flex";
 
 showLogin();
 

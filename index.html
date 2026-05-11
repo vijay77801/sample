@@ -37,6 +37,7 @@ body{
     gap:12px;
 }
 
+/* SEARCH */
 .search-box{
     position:relative;
     width:75%;
@@ -60,6 +61,7 @@ body{
     color:#777;
 }
 
+/* PROFILE ICON (RESTORED) */
 .profile{
     width:52px;
     height:52px;
@@ -68,6 +70,7 @@ body{
     background:white;
     flex-shrink:0;
     cursor:pointer;
+    border:2px solid #fff;
 }
 
 .profile img{
@@ -76,7 +79,7 @@ body{
     object-fit:cover;
 }
 
-/* LOCATION TEXT */
+/* LOCATION */
 .location-text{
     margin-top:10px;
     display:flex;
@@ -86,14 +89,14 @@ body{
     font-size:14px;
 }
 
-/* ================= CATEGORY SWIPE ================= */
+/* ================= CATEGORY ================= */
 .category-wrapper{
     margin-top:15px;
-    overflow-x:auto;
     display:flex;
     gap:12px;
+    overflow-x:auto;
     padding:10px;
-    scrollbar-width:none;
+    scroll-snap-type:x mandatory;
 }
 
 .category-wrapper::-webkit-scrollbar{
@@ -102,14 +105,15 @@ body{
 
 .category-card{
     flex:0 0 auto;
-    width:85px;
-    height:105px;
+    width:95px;
+    height:120px;
     background:black;
     border:2px solid #d4af37;
     border-radius:14px;
     text-align:center;
     color:white;
     padding:6px;
+    scroll-snap-align:start;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
@@ -117,14 +121,14 @@ body{
 }
 
 .category-card img{
-    width:70px;
-    height:60px;
+    width:75px;
+    height:70px;
     object-fit:cover;
     border-radius:10px;
 }
 
 .category-card p{
-    font-size:11px;
+    font-size:12px;
     font-weight:bold;
 }
 
@@ -137,14 +141,14 @@ body{
 
 .ads-track{
     display:flex;
-    gap:15px;
     width:max-content;
-    animation:adsMove 16s linear infinite;
+    gap:15px;
+    animation:adsMove 18s linear infinite;
 }
 
 .ads-card{
-    min-width:280px;
-    height:200px;
+    min-width:300px;
+    height:210px;
     border-radius:20px;
     overflow:hidden;
     position:relative;
@@ -174,32 +178,44 @@ body{
     100%{ transform:translateX(-50%); }
 }
 
-/* ================= LOCATION POPUP ================= */
-.popup{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
+/* PROFILE CARD (RESTORED) */
+.profile-card{
+    position:absolute;
+    top:85px;
+    right:15px;
+    width:300px;
     background:white;
+    border-radius:20px;
     padding:20px;
-    border-radius:20px 20px 0 0;
-    box-shadow:0 -5px 20px rgba(0,0,0,0.3);
+    display:none;
+    box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    z-index:999;
+}
+
+.profile-top{
     text-align:center;
-    z-index:9999;
+    margin-bottom:15px;
 }
 
-.popup button{
-    margin:6px;
-    padding:10px 14px;
-    border:none;
+.profile-top img{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+}
+
+.info-box{
+    background:#f5ecff;
+    padding:10px;
     border-radius:10px;
-    color:white;
-    cursor:pointer;
+    margin-bottom:10px;
 }
 
-.btn1{ background:#6a0dad; }
-.btn2{ background:#4b0082; }
-.btn3{ background:#999; }
+.info-box span{
+    display:block;
+    font-weight:bold;
+    color:#6a0dad;
+    font-size:13px;
+}
 
 </style>
 </head>
@@ -211,11 +227,11 @@ body{
     <div class="nav-top">
 
         <div class="search-box">
-            <input type="text" placeholder="Search...">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search jewellery...">
         </div>
 
-        <div class="profile">
+        <!-- PROFILE ICON (FIXED) -->
+        <div class="profile" onclick="toggleProfile()">
             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
         </div>
 
@@ -269,89 +285,97 @@ body{
     </div>
 </div>
 
-<!-- LOCATION SCRIPT -->
+<!-- PROFILE CARD -->
+<div class="profile-card" id="profileCard">
+
+    <div class="profile-top">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+        <h3>Vijay</h3>
+    </div>
+
+    <div class="info-box">
+        <span>Phone</span>
+        <p>+91 9876543210</p>
+    </div>
+
+    <div class="info-box">
+        <span>Email</span>
+        <p>vijay@email.com</p>
+    </div>
+
+    <div class="info-box">
+        <span>Address</span>
+        <p>Sajjapuram, Andhra Pradesh</p>
+    </div>
+
+</div>
+
 <script>
 
-const locationText = document.getElementById("locationText");
-
-function setText(msg){
-    locationText.innerText = msg;
+/* PROFILE TOGGLE */
+function toggleProfile(){
+    let card=document.getElementById("profileCard");
+    card.style.display = card.style.display==="block" ? "none" : "block";
 }
 
-function requestLocation(){
+/* LOCATION */
+const text=document.getElementById("locationText");
+
+function set(msg){
+    text.innerText=msg;
+}
+
+function getLocation(){
 
     if(!navigator.geolocation){
-        setText("Location not supported");
+        set("Location not supported");
         return;
     }
+
+    set("Detecting location...");
 
     navigator.geolocation.getCurrentPosition(
 
         async (pos)=>{
 
-            let lat = pos.coords.latitude;
-            let lon = pos.coords.longitude;
+            let lat=pos.coords.latitude;
+            let lon=pos.coords.longitude;
 
             try{
-                let res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-                let data = await res.json();
+                let res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                let data=await res.json();
 
-                let addr = data.address;
+                let addr=data.address||{};
 
-                let place = addr.city || addr.town || addr.village || addr.state || "Your area";
+                let place=
+                    addr.village||
+                    addr.town||
+                    addr.suburb||
+                    addr.city||
+                    addr.district||
+                    addr.state||
+                    "Your area";
 
-                setText("📍 " + place + ", India");
-            }
-            catch{
-                setText("📍 Location found but name unavailable");
+                set("📍 "+place+", India");
+
+            }catch(e){
+                set("📍 Location found");
             }
 
         },
 
         ()=>{
-            showPopup();
+            set("📍 Allow location permission");
         },
 
         {
             enableHighAccuracy:true,
-            timeout:10000
+            timeout:12000
         }
     );
 }
 
-/* POPUP */
-function showPopup(){
-
-    let div = document.createElement("div");
-    div.className = "popup";
-
-    div.innerHTML = `
-        <h3>📍 Allow Location Access</h3>
-        <p>We need location for nearby jewellery offers</p>
-
-        <button class="btn1" onclick="retry()">Allow This Time</button>
-        <button class="btn2" onclick="guide()">Allow Always</button>
-        <button class="btn3" onclick="deny()">Deny</button>
-    `;
-
-    document.body.appendChild(div);
-}
-
-function retry(){
-    document.querySelector(".popup").remove();
-    requestLocation();
-}
-
-function guide(){
-    alert("Go to browser settings → Site permissions → Allow Location");
-}
-
-function deny(){
-    document.querySelector(".popup").remove();
-    setText("📍 Location disabled");
-}
-
-window.onload = requestLocation;
+window.onload=getLocation;
 
 </script>
 

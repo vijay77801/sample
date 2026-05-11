@@ -19,7 +19,7 @@ body{
   overflow-x:hidden;
 }
 
-/* LOGIN & SIGNUP */
+/* LOGIN */
 
 .auth-container{
   height:100vh;
@@ -105,7 +105,7 @@ button{
   display:none;
 }
 
-/* HOME PAGE */
+/* HOME */
 
 #homePage{
   display:none;
@@ -122,6 +122,7 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
 }
 
 .profile-box{
@@ -157,7 +158,7 @@ button{
   margin-bottom:12px;
 }
 
-/* FACILITIES */
+/* SERVICES */
 
 .facilities{
   padding:20px;
@@ -172,7 +173,7 @@ button{
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:20px;
 }
 
@@ -185,7 +186,7 @@ button{
 
 .card img{
   width:100%;
-  height:190px;
+  height:200px;
   object-fit:cover;
 }
 
@@ -202,8 +203,6 @@ button{
   color:#666;
   line-height:1.5;
 }
-
-/* BOOK BUTTON */
 
 .call-btn{
   display:inline-block;
@@ -236,7 +235,7 @@ button{
 
 }
 
-/* APPOINTMENT POPUP */
+/* APPOINTMENT */
 
 .appointment-popup{
   position:fixed;
@@ -271,6 +270,34 @@ button{
   background:#ff4d4d;
 }
 
+/* RECEIPT */
+
+.receipt{
+  background:white;
+  margin:20px;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  display:none;
+}
+
+.receipt h2{
+  color:#0077ff;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.receipt p{
+  margin-bottom:10px;
+  color:#333;
+  line-height:1.6;
+}
+
+.whatsapp-btn{
+  margin-top:20px;
+  background:#25D366;
+}
+
 /* LOCATION */
 
 .location-section{
@@ -302,16 +329,16 @@ button{
 
   .topbar{
     flex-direction:column;
-    gap:15px;
   }
 
 }
 
 </style>
 </head>
+
 <body>
 
-<!-- LOGIN & SIGNUP -->
+<!-- LOGIN -->
 
 <div class="auth-container" id="authSection">
 
@@ -386,7 +413,7 @@ Sign Up
 </div>
 </div>
 
-<!-- HOME PAGE -->
+<!-- HOME -->
 
 <div id="homePage">
 
@@ -417,21 +444,17 @@ id="profilePopup">
 
 <h3>👤 User Profile</h3>
 
-<p>
-<strong>Name:</strong>
-<span id="popupName">Guest</span>
-</p>
+<p><strong>Name:</strong>
+<span id="popupName"></span></p>
 
-<p>
-<strong>Phone:</strong>
-<span id="popupPhone">0000000000</span>
-</p>
+<p><strong>Phone:</strong>
+<span id="popupPhone"></span></p>
 
 </div>
 
 </div>
 
-<!-- FACILITIES -->
+<!-- SERVICES -->
 
 <div class="facilities">
 
@@ -441,11 +464,9 @@ Our Hospital Facilities
 
 <div class="cards">
 
-<!-- CARD 1 -->
-
 <div class="card">
 
-<img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=1200">
+<img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg">
 
 <div class="card-content">
 
@@ -464,11 +485,9 @@ onclick="openAppointmentForm('Emergency Care')">
 </div>
 </div>
 
-<!-- CARD 2 -->
-
 <div class="card">
 
-<img src="https://images.pexels.com/photos/247786/pexels-photo-247786.jpeg?auto=compress&cs=tinysrgb&w=1200">
+<img src="https://images.pexels.com/photos/247786/pexels-photo-247786.jpeg">
 
 <div class="card-content">
 
@@ -487,11 +506,9 @@ onclick="openAppointmentForm('ICU & Critical Care')">
 </div>
 </div>
 
-<!-- CARD 3 -->
-
 <div class="card">
 
-<img src="https://images.pexels.com/photos/305568/pexels-photo-305568.jpeg?auto=compress&cs=tinysrgb&w=1200">
+<img src="https://images.pexels.com/photos/305568/pexels-photo-305568.jpeg">
 
 <div class="card-content">
 
@@ -514,7 +531,7 @@ onclick="openAppointmentForm('Operation Theatre')">
 
 </div>
 
-<!-- APPOINTMENT POPUP -->
+<!-- APPOINTMENT -->
 
 <div class="appointment-popup"
 id="appointmentPopup">
@@ -525,18 +542,15 @@ id="appointmentPopup">
 📅 Book Appointment
 </h2>
 
-<input
-type="text"
+<input type="text"
 id="patientName"
 placeholder="Patient Name">
 
-<input
-type="number"
+<input type="number"
 id="patientAge"
 placeholder="Patient Age">
 
-<input
-type="text"
+<input type="text"
 id="patientDisease"
 placeholder="Disease / Problem">
 
@@ -546,30 +560,15 @@ placeholder="Disease / Problem">
 Select Payment Mode
 </option>
 
-<option>
-Cash
-</option>
-
-<option>
-PhonePe
-</option>
-
-<option>
-Google Pay
-</option>
-
-<option>
-Paytm
-</option>
-
-<option>
-Card
-</option>
+<option>Cash</option>
+<option>PhonePe</option>
+<option>Google Pay</option>
+<option>Paytm</option>
+<option>Card</option>
 
 </select>
 
-<input
-type="text"
+<input type="text"
 id="selectedService"
 readonly>
 
@@ -577,13 +576,33 @@ readonly>
 Confirm Appointment
 </button>
 
-<button
-class="close-btn"
+<button class="close-btn"
 onclick="closeAppointmentForm()">
 Close
 </button>
 
 </div>
+
+</div>
+
+<!-- RECEIPT -->
+
+<div class="receipt"
+id="receiptBox">
+
+<h2>
+🏥 Appointment Receipt
+</h2>
+
+<div id="receiptContent"></div>
+
+<button
+class="whatsapp-btn"
+onclick="sendWhatsappReceipt()">
+
+Send Receipt To WhatsApp
+
+</button>
 
 </div>
 
@@ -599,9 +618,7 @@ Close
 
 <h3>Subbarao Hospital</h3>
 
-<p>
-Razole, Andhra Pradesh, India
-</p>
+<p>Razole, Andhra Pradesh</p>
 
 <iframe
 width="100%"
@@ -625,6 +642,10 @@ Logout
 
 <script>
 
+/* USER */
+
+let currentUser = null;
+
 /* SIGNUP */
 
 function signup(){
@@ -635,20 +656,18 @@ document.getElementById("signupUsername").value.trim();
 const mobile =
 document.getElementById("signupMobile").value.trim();
 
-const msg =
-document.getElementById("signupMsg");
-
 if(!username || !mobile){
 
-msg.style.color="red";
-msg.innerText="Please fill all fields";
+document.getElementById("signupMsg")
+.innerHTML="Fill all fields";
+
 return;
 
 }
 
 const user = {
-username:username,
-mobile:mobile
+username,
+mobile
 };
 
 localStorage.setItem(
@@ -656,12 +675,12 @@ localStorage.setItem(
 JSON.stringify(user)
 );
 
-msg.style.color="green";
-msg.innerText="Signup successful ✅";
+document.getElementById("signupMsg")
+.innerHTML="Signup Successful ✅";
 
 setTimeout(()=>{
 showLogin();
-},1200);
+},1000);
 
 }
 
@@ -675,9 +694,6 @@ document.getElementById("loginUsername").value.trim();
 const mobile =
 document.getElementById("loginMobile").value.trim();
 
-const msg =
-document.getElementById("loginMsg");
-
 const savedUser =
 JSON.parse(
 localStorage.getItem("hospitalUser")
@@ -689,19 +705,16 @@ savedUser.username === username &&
 savedUser.mobile === mobile
 ){
 
-msg.style.color="green";
-msg.innerText="Login successful 💙";
+currentUser = savedUser;
 
 document.getElementById("profileName")
-.innerText = savedUser.username;
+.innerHTML = username;
 
 document.getElementById("popupName")
-.innerText = savedUser.username;
+.innerHTML = username;
 
 document.getElementById("popupPhone")
-.innerText = savedUser.mobile;
-
-setTimeout(()=>{
+.innerHTML = mobile;
 
 document.getElementById("authSection")
 .style.display="none";
@@ -709,218 +722,16 @@ document.getElementById("authSection")
 document.getElementById("homePage")
 .style.display="block";
 
-},1000);
-
 }else{
 
-msg.style.color="red";
-msg.innerText="Invalid account details";
+document.getElementById("loginMsg")
+.innerHTML="Invalid Details ❌";
 
 }
 
 }
 
-/* PROFILE */
-
-function toggleProfilePopup(){
-
-const popup =
-document.getElementById("profilePopup");
-
-if(popup.style.display==="block"){
-popup.style.display="none";
-}else{
-popup.style.display="block";
-}
-
-}
-
-/* APPOINTMENT */
-
-let currentService = "";
-
-function openAppointmentForm(service){
-
-currentService = service;
-
-document.getElementById("appointmentPopup")
-.style.display="flex";
-
-document.getElementById("selectedService")
-.value = "Department: " + service;
-
-}
-
-function closeAppointmentForm(){
-
-document.getElementById("appointmentPopup")
-.style.display="none";
-
-}
-
-/* CONFIRM APPOINTMENT */
-
-function submitAppointment(){
-
-const savedUser =
-JSON.parse(
-localStorage.getItem("hospitalUser")
-);
-
-const patientName =
-document.getElementById("patientName").value;
-
-const patientAge =
-document.getElementById("patientAge").value;
-
-const disease =
-document.getElementById("patientDisease").value;
-
-const paymentMode =
-document.getElementById("paymentMode").value;
-
-if(
-!patientName ||
-!patientAge ||
-!disease ||
-!paymentMode
-){
-
-alert("Please fill all details");
-return;
-
-}
-
-/* TOKEN */
-
-const tokenNumber =
-"TOKEN-" + Math.floor(
-1000 + Math.random() * 9000
-);
-
-/* DATE */
-
-const today =
-new Date();
-
-const appointmentDate =
-today.toLocaleDateString();
-
-const appointmentTime =
-today.toLocaleTimeString();
-
-/* CHECK IN */
-
-const checkInTime =
-"09:30 AM";
-
-/* CHECK OUT */
-
-const checkOutTime =
-"11:00 AM";
-
-/* HOSPITAL */
-
-const hospitalAddress =
-"Subbarao Hospital, Razole, Andhra Pradesh";
-
-const mapsLink =
-"https://maps.google.com/?q=Razole+Andhra+Pradesh";
-
-/* USER WHATSAPP */
-
-const userWhatsapp =
-savedUser.mobile;
-
-/* MESSAGE */
-
-const message =
-
-`🏥 SUBBARAO HOSPITAL
-
-✅ APPOINTMENT CONFIRMED
-
-🎟 Token Number:
-${tokenNumber}
-
-👤 Patient Name:
-${patientName}
-
-📱 Mobile:
-${savedUser.mobile}
-
-🎂 Age:
-${patientAge}
-
-🦠 Disease:
-${disease}
-
-🩺 Department:
-${currentService}
-
-💳 Payment Mode:
-${paymentMode}
-
-📅 Appointment Date:
-${appointmentDate}
-
-⏰ Appointment Time:
-${appointmentTime}
-
-🟢 Check-In Time:
-${checkInTime}
-
-🔴 Check-Out Time:
-${checkOutTime}
-
-📍 Hospital Address:
-${hospitalAddress}
-
-🗺 Google Maps:
-${mapsLink}
-
-🙏 Please arrive 15 minutes early.`;
-
-/* OPEN WHATSAPP */
-
-const whatsappURL =
-`https://wa.me/91${userWhatsapp}?text=${encodeURIComponent(message)}`;
-
-window.open(
-whatsappURL,
-"_blank"
-);
-
-alert("Appointment Confirmed ✅");
-
-/* CLOSE FORM */
-
-closeAppointmentForm();
-
-/* CLEAR FORM */
-
-document.getElementById("patientName").value="";
-document.getElementById("patientAge").value="";
-document.getElementById("patientDisease").value="";
-document.getElementById("paymentMode").value="";
-
-}
-
-/* LOGOUT */
-
-function logout(){
-
-document.getElementById("homePage")
-.style.display="none";
-
-document.getElementById("authSection")
-.style.display="flex";
-
-showLogin();
-
-}
-
-/* PAGE SWITCH */
+/* SWITCH */
 
 function showLogin(){
 
@@ -939,6 +750,183 @@ document.getElementById("loginPage")
 
 document.getElementById("signupPage")
 .style.display="block";
+
+}
+
+/* PROFILE */
+
+function toggleProfilePopup(){
+
+const popup =
+document.getElementById("profilePopup");
+
+popup.style.display =
+popup.style.display === "block"
+? "none"
+: "block";
+
+}
+
+/* APPOINTMENT */
+
+let currentService = "";
+let receiptMessage = "";
+
+function openAppointmentForm(service){
+
+currentService = service;
+
+document.getElementById("appointmentPopup")
+.style.display="flex";
+
+document.getElementById("selectedService")
+.value = service;
+
+}
+
+function closeAppointmentForm(){
+
+document.getElementById("appointmentPopup")
+.style.display="none";
+
+}
+
+/* SUBMIT */
+
+function submitAppointment(){
+
+const patientName =
+document.getElementById("patientName").value;
+
+const patientAge =
+document.getElementById("patientAge").value;
+
+const patientDisease =
+document.getElementById("patientDisease").value;
+
+const paymentMode =
+document.getElementById("paymentMode").value;
+
+if(
+!patientName ||
+!patientAge ||
+!patientDisease ||
+!paymentMode
+){
+
+alert("Fill all details");
+return;
+
+}
+
+const token =
+"TOKEN-" + Math.floor(
+1000 + Math.random()*9000
+);
+
+const checkIn =
+"09:30 AM";
+
+const checkOut =
+"11:00 AM";
+
+const date =
+new Date().toLocaleDateString();
+
+const time =
+new Date().toLocaleTimeString();
+
+receiptMessage =
+
+`🏥 SUBBARAO HOSPITAL
+
+✅ Appointment Confirmed
+
+🎟 Token:
+${token}
+
+👤 Patient:
+${patientName}
+
+📱 Mobile:
+${currentUser.mobile}
+
+🎂 Age:
+${patientAge}
+
+🦠 Disease:
+${patientDisease}
+
+🩺 Department:
+${currentService}
+
+💳 Payment:
+${paymentMode}
+
+📅 Date:
+${date}
+
+⏰ Time:
+${time}
+
+🟢 Check-In:
+${checkIn}
+
+🔴 Check-Out:
+${checkOut}
+
+📍 Razole, Andhra Pradesh`;
+
+document.getElementById("receiptContent")
+.innerHTML = `
+
+<p><strong>Token:</strong> ${token}</p>
+
+<p><strong>Patient:</strong> ${patientName}</p>
+
+<p><strong>Mobile:</strong> ${currentUser.mobile}</p>
+
+<p><strong>Department:</strong> ${currentService}</p>
+
+<p><strong>Check-In:</strong> ${checkIn}</p>
+
+<p><strong>Check-Out:</strong> ${checkOut}</p>
+
+`;
+
+document.getElementById("receiptBox")
+.style.display="block";
+
+closeAppointmentForm();
+
+}
+
+/* SEND WHATSAPP */
+
+function sendWhatsappReceipt(){
+
+const whatsappURL =
+
+`https://wa.me/91${currentUser.mobile}?text=${encodeURIComponent(receiptMessage)}`;
+
+window.open(
+whatsappURL,
+"_blank"
+);
+
+}
+
+/* LOGOUT */
+
+function logout(){
+
+document.getElementById("homePage")
+.style.display="none";
+
+document.getElementById("authSection")
+.style.display="flex";
+
+showLogin();
 
 }
 

@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cezo Scanner</title>
+<title>Cezooo Billing</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 
@@ -17,96 +20,410 @@
 }
 
 body{
-    background:#f2f2f2;
+    background:linear-gradient(180deg,#111,#1f1f1f,#2b2b2b);
+    overflow-x:hidden;
+    color:white;
     padding:15px;
 }
 
-.header{
+/* Splash Screen */
+
+.splash{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100vh;
     background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:9999;
+    animation:hideSplash 1s forwards;
+    animation-delay:4s;
+}
+
+.logo{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#ff9800,#ff5722);
+    display:flex;
+    justify-content:center;
+    align-items:center;
     color:white;
-    text-align:center;
-    padding:18px;
-    border-radius:15px;
-    font-size:28px;
+    font-size:60px;
     font-weight:bold;
+    box-shadow:0 0 50px #ff9800;
+    animation:zoom 2s infinite;
+}
+
+.title{
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:42px;
+    font-weight:bold;
+    margin-top:25px;
+    letter-spacing:3px;
+    text-shadow:0 0 20px #ff9800;
+    padding:0 10px;
+}
+
+.loading{
+    width:260px;
+    height:8px;
+    background:#333;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:30px;
+}
+
+.loading span{
+    display:block;
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#ff9800,#ff5722);
+    animation:load 4s linear forwards;
+}
+
+/* Main */
+
+.main{
+    display:none;
+    padding-bottom:100px;
+}
+
+/* Header */
+
+.header{
+    background:linear-gradient(45deg,#ff9800,#ff5722);
+    padding:20px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(255,152,0,0.5);
+}
+
+.header h1{
+    font-size:34px;
+}
+
+.header p{
+    margin-top:8px;
+    opacity:0.9;
+}
+
+/* Scanner */
+
+.scanner-box{
+    margin-top:20px;
+    background:#1f1f1f;
+    padding:15px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.4);
 }
 
 #reader{
     width:100%;
-    margin-top:20px;
-    background:white;
-    padding:10px;
     border-radius:15px;
+    overflow:hidden;
+}
+
+/* Buttons */
+
+.scan-btn,
+.search-btn{
+
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:15px;
+    font-size:20px;
+    font-weight:bold;
+    margin-top:15px;
+    cursor:pointer;
+    transition:0.3s;
+
 }
 
 .scan-btn{
-    width:100%;
-    padding:15px;
-    border:none;
-    background:#ff9800;
+    background:linear-gradient(45deg,#ff9800,#ff5722);
     color:white;
-    border-radius:12px;
-    font-size:20px;
-    margin-top:15px;
 }
+
+.search-btn{
+    background:white;
+    color:#111;
+}
+
+.scan-btn:hover,
+.search-btn:hover{
+    transform:scale(1.03);
+}
+
+/* Status */
 
 .status{
+    margin-top:18px;
     text-align:center;
-    margin-top:15px;
     font-size:18px;
     font-weight:bold;
+    color:#ffcc80;
 }
 
-.card{
-    background:white;
-    margin-top:20px;
-    padding:15px;
+/* Search */
+
+.search-box{
+    margin-top:25px;
+}
+
+.search-input{
+    width:100%;
+    padding:16px;
+    border:none;
     border-radius:15px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    background:#1f1f1f;
+    color:white;
+    font-size:18px;
+    outline:none;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Product Card */
+
+.card{
+    margin-top:25px;
+    background:#1f1f1f;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+    animation:cardPop 0.5s ease;
 }
 
 .card img{
     width:100%;
-    height:200px;
+    height:240px;
     object-fit:contain;
+    background:white;
 }
 
-.card h2{
+.card-content{
+    padding:18px;
+}
+
+.card-content h2{
+    color:#ff9800;
+    font-size:26px;
+}
+
+.card-content p{
     margin-top:10px;
+    font-size:18px;
+    color:#ddd;
 }
 
-.card p{
-    margin-top:8px;
-    font-size:18px;
+/* Bottom Nav */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#111;
+    padding:14px;
+    display:flex;
+    justify-content:space-around;
+    border-top:2px solid #ff9800;
+}
+
+.bottom-nav i{
+    color:white;
+    font-size:24px;
+}
+
+/* Animations */
+
+@keyframes zoom{
+
+    50%{
+        transform:scale(1.1);
+    }
+
+}
+
+@keyframes load{
+
+    100%{
+        width:100%;
+    }
+
+}
+
+@keyframes hideSplash{
+
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+
+}
+
+@keyframes cardPop{
+
+    from{
+        transform:scale(0.8);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
 }
 
 </style>
 </head>
 <body>
 
-<div class="header">
-    CEZO SCANNER
+<!-- Splash -->
+
+<div class="splash">
+
+    <div class="logo">
+        C
+    </div>
+
+    <div class="title">
+        CEZOOO BILLING
+    </div>
+
+    <div class="loading">
+        <span></span>
+    </div>
+
 </div>
 
-<div id="reader"></div>
+<!-- Main -->
 
-<button class="scan-btn" onclick="startScanner()">
-    Open Back Camera Scanner
-</button>
+<div class="main" id="main">
 
-<div class="status" id="status">
-    Scan Product Barcode
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>CEZOOO BILLING</h1>
+
+        <p>Smart Barcode Billing Scanner</p>
+
+    </div>
+
+    <!-- Scanner -->
+
+    <div class="scanner-box">
+
+        <div id="reader"></div>
+
+        <button class="scan-btn" onclick="startScanner()">
+            <i class="fa-solid fa-camera"></i>
+            Scan Product Barcode
+        </button>
+
+        <div class="status" id="status">
+            Ready To Scan Products
+        </div>
+
+    </div>
+
+    <!-- Products -->
+
+    <div id="products"></div>
+
+    <!-- Search -->
+
+    <div class="search-box">
+
+        <input 
+        type="text"
+        id="manualBarcode"
+        class="search-input"
+        placeholder="Enter Barcode Number">
+
+        <button 
+        class="search-btn"
+        onclick="searchBarcode()">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Search Product
+
+        </button>
+
+    </div>
+
 </div>
 
-<div id="products"></div>
+<!-- Bottom Navigation -->
+
+<div class="bottom-nav">
+
+    <i class="fa-solid fa-house"></i>
+
+    <i class="fa-solid fa-barcode"></i>
+
+    <i class="fa-solid fa-cart-shopping"></i>
+
+    <i class="fa-solid fa-user"></i>
+
+</div>
 
 <script>
 
+/* Show Main */
+
+setTimeout(function(){
+
+    document.getElementById("main").style.display="block";
+
+},4000);
+
 let scanned = [];
+
+/* Show Product */
+
+function showProduct(productName,brand,image,code){
+
+    document.getElementById("products").innerHTML += `
+
+    <div class="card">
+
+        <img src="${image}">
+
+        <div class="card-content">
+
+            <h2>${productName}</h2>
+
+            <p><b>Brand :</b> ${brand}</p>
+
+            <p><b>Barcode :</b> ${code}</p>
+
+        </div>
+
+    </div>
+
+    `;
+
+    document.getElementById("status").innerHTML =
+    productName + " Found";
+
+}
+
+/* Start Scanner */
 
 function startScanner(){
 
-    const html5QrCode = new Html5Qrcode("reader");
+    const html5QrCode =
+    new Html5Qrcode("reader");
 
     Html5Qrcode.getCameras().then(devices => {
 
@@ -135,77 +452,77 @@ function startScanner(){
                 scanned.push(code);
 
                 document.getElementById("status").innerHTML =
-                "Searching Exact Product...";
+                "Searching Product...";
 
-                try{
-
-                    /* REAL PRODUCT DATABASE */
-
-                    let response =
-                    await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json`);
-
-                    let data =
-                    await response.json();
-
-                    let productName =
-                    data.product?.product_name;
-
-                    let brand =
-                    data.product?.brands;
-
-                    let image =
-                    data.product?.image_front_url;
-
-                    if(!productName){
-
-                        productName = "Exact Product Not Found";
-
-                    }
-
-                    if(!brand){
-
-                        brand = "Unknown Brand";
-
-                    }
-
-                    if(!image){
-
-                        image =
-                        "https://cdn-icons-png.flaticon.com/512/3081/3081559.png";
-
-                    }
-
-                    document.getElementById("products").innerHTML += `
-
-                    <div class="card">
-
-                        <img src="${image}">
-
-                        <h2>${productName}</h2>
-
-                        <p><b>Brand :</b> ${brand}</p>
-
-                        <p><b>Barcode :</b> ${code}</p>
-
-                    </div>
-
-                    `;
-
-                    document.getElementById("status").innerHTML =
-                    productName;
-
-                }catch(error){
-
-                    document.getElementById("status").innerHTML =
-                    "Internet Error";
-
-                }
+                searchProduct(code);
 
             }
 
         );
 
     });
+
+}
+
+/* Search Product */
+
+async function searchProduct(code){
+
+    try{
+
+        let response =
+        await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json`);
+
+        let data =
+        await response.json();
+
+        let productName =
+        data.product?.product_name ||
+        "Product Found";
+
+        let brand =
+        data.product?.brands ||
+        "Unknown Brand";
+
+        let image =
+        data.product?.image_front_url ||
+        "https://cdn-icons-png.flaticon.com/512/3081/3081559.png";
+
+        showProduct(
+            productName,
+            brand,
+            image,
+            code
+        );
+
+    }catch(error){
+
+        document.getElementById("status").innerHTML =
+        "Internet Error";
+
+    }
+
+}
+
+/* Manual Search */
+
+function searchBarcode(){
+
+    let code =
+    document.getElementById("manualBarcode").value;
+
+    if(code==""){
+
+        alert("Enter Barcode");
+
+        return;
+
+    }
+
+    document.getElementById("status").innerHTML =
+    "Searching Product...";
+
+    searchProduct(code);
 
 }
 

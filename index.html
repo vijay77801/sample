@@ -74,7 +74,7 @@ body{
     animation:load 3s linear forwards;
 }
 
-/* Main */
+/* Main Page */
 
 .main{
     display:none;
@@ -123,6 +123,7 @@ body{
     margin-top:20px;
     padding:15px;
     border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -232,7 +233,7 @@ body{
 
 setTimeout(function(){
 
-    document.getElementById("main").style.display="block";
+    document.getElementById("main").style.display = "block";
 
 },3000);
 
@@ -242,6 +243,85 @@ let total = 0;
 let scanned = [];
 let scannerStarted = false;
 let html5QrCode;
+
+/* Product Search */
+
+async function getProduct(code){
+
+    document.getElementById("status").innerHTML =
+    "Searching Product...";
+
+    try{
+
+        let response =
+        await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+
+        let data =
+        await response.json();
+
+        if(data.status == 1){
+
+            let product =
+            data.product.product_name ||
+            "Super Market Product";
+
+            let image =
+            data.product.image_front_small_url ||
+            "https://via.placeholder.com/200";
+
+            let quantity = 1;
+
+            /* Demo Price */
+
+            let price =
+            Math.floor(Math.random()*500)+20;
+
+            let final =
+            quantity * price;
+
+            total += final;
+
+            document.getElementById("grand").innerHTML =
+            total;
+
+            document.getElementById("products").innerHTML += `
+
+            <div class="card">
+
+                <img src="${image}">
+
+                <h2>${product}</h2>
+
+                <p><b>Barcode :</b> ${code}</p>
+
+                <p><b>Price :</b> ₹ ${price}</p>
+
+                <p><b>Quantity :</b> ${quantity}</p>
+
+                <p><b>Total :</b> ₹ ${final}</p>
+
+            </div>
+
+            `;
+
+            document.getElementById("status").innerHTML =
+            product + " Added Successfully";
+
+        }else{
+
+            document.getElementById("status").innerHTML =
+            "Product Not Found";
+
+        }
+
+    }catch(error){
+
+        document.getElementById("status").innerHTML =
+        "Internet Error";
+
+    }
+
+}
 
 /* Start Scanner */
 
@@ -253,10 +333,8 @@ async function startScanner(){
 
     scannerStarted = true;
 
-    document.getElementById("status").innerHTML =
-    "Opening Back Camera...";
-
-    html5QrCode = new Html5Qrcode("reader");
+    html5QrCode =
+    new Html5Qrcode("reader");
 
     try{
 
@@ -279,76 +357,7 @@ async function startScanner(){
 
                 scanned.push(code);
 
-                document.getElementById("status").innerHTML =
-                "Scanning Product...";
-
-                try{
-
-                    let response =
-                    await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
-
-                    let data =
-                    await response.json();
-
-                    if(data.status == 1){
-
-                        let product =
-                        data.product.product_name ||
-                        "Super Market Product";
-
-                        let image =
-                        data.product.image_front_small_url ||
-                        "https://via.placeholder.com/200";
-
-                        let quantity = 1;
-
-                        let price =
-                        Math.floor(Math.random()*500)+20;
-
-                        let final =
-                        quantity * price;
-
-                        total += final;
-
-                        document.getElementById("grand").innerHTML =
-                        total;
-
-                        document.getElementById("products").innerHTML += `
-
-                        <div class="card">
-
-                            <img src="${image}">
-
-                            <h2>${product}</h2>
-
-                            <p><b>Barcode :</b> ${code}</p>
-
-                            <p><b>Price :</b> ₹ ${price}</p>
-
-                            <p><b>Quantity :</b> ${quantity}</p>
-
-                            <p><b>Total :</b> ₹ ${final}</p>
-
-                        </div>
-
-                        `;
-
-                        document.getElementById("status").innerHTML =
-                        product + " Added Successfully";
-
-                    }else{
-
-                        document.getElementById("status").innerHTML =
-                        "Product Not Found";
-
-                    }
-
-                }catch(error){
-
-                    document.getElementById("status").innerHTML =
-                    "Internet Error";
-
-                }
+                getProduct(code);
 
             }
 

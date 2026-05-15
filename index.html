@@ -1,12 +1,15 @@
+# Mobile Billing Webpage with Barcode Scanner
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jewellery Store</title>
+<title>Cezo Scanner</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
 <style>
 
@@ -18,366 +21,369 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 }
 
 body{
-    background:linear-gradient(135deg,#4b0082,#6a0dad,#8a2be2);
-    min-height:100vh;
-    overflow-x:hidden;
-}
-
-/* NAVBAR */
-.navbar{
-    width:100%;
+    background:#f3f4f6;
     padding:15px;
-    background:rgba(255,255,255,0.1);
-    backdrop-filter:blur(10px);
 }
 
-.nav-top{
-    display:flex;
-    align-items:center;
-    gap:12px;
+.container{
+    max-width:1000px;
+    margin:auto;
 }
 
-/* SEARCH */
-.search-box{
-    position:relative;
-    width:75%;
+.header{
+    background:#ffcc00;
+    padding:18px;
+    border-radius:15px;
+    text-align:center;
+    margin-bottom:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-.search-box input{
-    width:100%;
-    padding:14px 45px 14px 18px;
-    border:none;
-    outline:none;
-    border-radius:35px;
+.header h1{
+    color:#222;
+    font-size:32px;
+}
+
+.scanner-box{
     background:white;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+}
+
+#scanner{
+    width:100%;
+    height:320px;
+    border-radius:12px;
+    overflow:hidden;
+    border:3px solid #ffcc00;
+}
+
+.scan-btn{
+    width:100%;
+    margin-top:15px;
+    padding:14px;
+    border:none;
+    background:#222;
+    color:white;
+    font-size:18px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.scan-btn:hover{
+    background:#000;
+}
+
+.bill-box{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.customer-box{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.customer-box input{
+    flex:1;
+    min-width:250px;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
     font-size:16px;
 }
 
-.search-box i{
-    position:absolute;
-    right:16px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#777;
-}
-
-/* PROFILE ICON (RESTORED) */
-.profile{
-    width:52px;
-    height:52px;
-    border-radius:50%;
-    overflow:hidden;
-    background:white;
-    flex-shrink:0;
-    cursor:pointer;
-    border:2px solid #fff;
-}
-
-.profile img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-/* LOCATION */
-.location-text{
-    margin-top:10px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    color:white;
-    font-size:14px;
-}
-
-/* ================= CATEGORY ================= */
-.category-wrapper{
-    margin-top:15px;
-    display:flex;
-    gap:12px;
+.table-box{
     overflow-x:auto;
-    padding:10px;
-    scroll-snap-type:x mandatory;
 }
 
-.category-wrapper::-webkit-scrollbar{
-    display:none;
+table{
+    width:100%;
+    border-collapse:collapse;
 }
 
-.category-card{
-    flex:0 0 auto;
-    width:95px;
-    height:120px;
-    background:black;
-    border:2px solid #d4af37;
-    border-radius:14px;
-    text-align:center;
+table th{
+    background:#222;
     color:white;
-    padding:6px;
-    scroll-snap-align:start;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    align-items:center;
+    padding:14px;
 }
 
-.category-card img{
-    width:75px;
-    height:70px;
-    object-fit:cover;
-    border-radius:10px;
-}
-
-.category-card p{
-    font-size:12px;
-    font-weight:bold;
-}
-
-/* ================= ADS ================= */
-.ads-wrapper{
-    margin-top:25px;
-    overflow:hidden;
-    width:100%;
-}
-
-.ads-track{
-    display:flex;
-    width:max-content;
-    gap:15px;
-    animation:adsMove 18s linear infinite;
-}
-
-.ads-card{
-    min-width:300px;
-    height:210px;
-    border-radius:20px;
-    overflow:hidden;
-    position:relative;
-    flex-shrink:0;
-}
-
-.ads-card img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.ads-name{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    padding:10px;
-    background:rgba(0,0,0,0.5);
-    color:white;
+table td{
+    border:1px solid #ddd;
+    padding:12px;
     text-align:center;
-    font-size:18px;
-    font-weight:bold;
 }
 
-@keyframes adsMove{
-    0%{ transform:translateX(0); }
-    100%{ transform:translateX(-50%); }
+.total-box{
+    margin-top:20px;
+    text-align:right;
 }
 
-/* PROFILE CARD (RESTORED) */
-.profile-card{
-    position:absolute;
-    top:85px;
-    right:15px;
-    width:300px;
-    background:white;
-    border-radius:20px;
-    padding:20px;
-    display:none;
-    box-shadow:0 8px 20px rgba(0,0,0,0.3);
-    z-index:999;
-}
-
-.profile-top{
-    text-align:center;
+.total-box h2{
+    color:#111;
     margin-bottom:15px;
 }
 
-.profile-top img{
-    width:80px;
-    height:80px;
-    border-radius:50%;
+.print-btn{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:14px 25px;
+    border-radius:12px;
+    font-size:18px;
+    cursor:pointer;
 }
 
-.info-box{
-    background:#f5ecff;
-    padding:10px;
-    border-radius:10px;
-    margin-bottom:10px;
+.print-btn:hover{
+    background:#218838;
 }
 
-.info-box span{
-    display:block;
+.status{
+    text-align:center;
+    margin-top:10px;
     font-weight:bold;
-    color:#6a0dad;
-    font-size:13px;
+    color:#333;
+}
+
+@media(max-width:768px){
+
+    .header h1{
+        font-size:24px;
+    }
+
+    #scanner{
+        height:250px;
+    }
+
+    table{
+        font-size:13px;
+    }
+
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="navbar">
+<div class="container">
 
-    <div class="nav-top">
-
-        <div class="search-box">
-            <input type="text" placeholder="Search jewellery...">
-        </div>
-
-        <!-- PROFILE ICON (FIXED) -->
-        <div class="profile" onclick="toggleProfile()">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-        </div>
-
+    <div class="header">
+        <h1><i class="fa-solid fa-cart-shopping"></i> Cezo Scanner</h1>
     </div>
 
-    <div class="location-text">
-        <i class="fa-solid fa-location-dot"></i>
-        <span id="locationText">Detecting location...</span>
-    </div>
+    <div class="scanner-box">
 
-</div>
+        <div id="scanner"></div>
 
-<!-- CATEGORY -->
-<div class="category-wrapper">
+        <button class="scan-btn" onclick="startScanner()">
+            <i class="fa-solid fa-camera"></i> Open Camera & Scan Product
+        </button>
 
-    <div class="category-card"><img src="https://images.unsplash.com/photo-1617038220319-276d3cfab638"><p>Necklace</p></div>
-    <div class="category-card"><img src="https://images.unsplash.com/photo-1603974372039-adc49044b6bd"><p>Chain</p></div>
-    <div class="category-card"><img src="https://images.unsplash.com/photo-1635767798638-3e25273a8236"><p>Choker</p></div>
-    <div class="category-card"><img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d"><p>Pendant</p></div>
-    <div class="category-card"><img src="https://images.unsplash.com/photo-1630019852942-f89202989a59"><p>Earrings</p></div>
-    <div class="category-card"><img src="https://images.pexels.com/photos/9428788/pexels-photo-9428788.jpeg"><p>Jhumkas</p></div>
-    <div class="category-card"><img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338"><p>Studs</p></div>
-    <div class="category-card"><img src="https://images.pexels.com/photos/10983783/pexels-photo-10983783.jpeg"><p>Hoops</p></div>
-
-</div>
-
-<!-- ADS -->
-<div class="ads-wrapper">
-    <div class="ads-track">
-
-        <div class="ads-card">
-            <img src="https://images.unsplash.com/photo-1617038220319-276d3cfab638">
-            <div class="ads-name">Necklace</div>
-        </div>
-
-        <div class="ads-card">
-            <img src="https://images.unsplash.com/photo-1603974372039-adc49044b6bd">
-            <div class="ads-name">Chain</div>
-        </div>
-
-        <div class="ads-card">
-            <img src="https://images.unsplash.com/photo-1635767798638-3e25273a8236">
-            <div class="ads-name">Choker</div>
-        </div>
-
-        <div class="ads-card">
-            <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d">
-            <div class="ads-name">Pendant</div>
+        <div class="status" id="status">
+            Click button to start scanning
         </div>
 
     </div>
-</div>
 
-<!-- PROFILE CARD -->
-<div class="profile-card" id="profileCard">
+    <div class="bill-box">
 
-    <div class="profile-top">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-        <h3>Vijay</h3>
-    </div>
+        <div class="customer-box">
+            <input type="text" placeholder="Customer Name">
+            <input type="number" placeholder="Phone Number">
+            <input type="text" value="BILL1001">
+        </div>
 
-    <div class="info-box">
-        <span>Phone</span>
-        <p>+91 9876543210</p>
-    </div>
+        <div class="table-box">
 
-    <div class="info-box">
-        <span>Email</span>
-        <p>vijay@email.com</p>
-    </div>
+            <table id="billTable">
 
-    <div class="info-box">
-        <span>Address</span>
-        <p>Sajjapuram, Andhra Pradesh</p>
+                <tr>
+                    <th>Barcode</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+
+            </table>
+
+        </div>
+
+        <div class="total-box">
+            <h2>Grand Total : ₹ <span id="grandTotal">0</span></h2>
+
+            <button class="print-btn" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Print Bill
+            </button>
+        </div>
+
     </div>
 
 </div>
 
 <script>
 
-/* PROFILE TOGGLE */
-function toggleProfile(){
-    let card=document.getElementById("profileCard");
-    card.style.display = card.style.display==="block" ? "none" : "block";
+let scannedCodes = [];
+
+const products = {
+
+    "8901030895484": {
+        name: "Coca Cola 750ml",
+        price: 45
+    },
+
+    "8901491101198": {
+        name: "Maggi Noodles",
+        price: 14
+    },
+
+    "8906009459621": {
+        name: "Dairy Milk Chocolate",
+        price: 40
+    },
+
+    "8901063162362": {
+        name: "Parle-G Biscuits",
+        price: 10
+    },
+
+    "8902519012330": {
+        name: "Surf Excel Soap",
+        price: 38
+    },
+
+    "8902080035684": {
+        name: "Aashirvaad Atta",
+        price: 320
+    }
+
+};
+
+function startScanner(){
+
+    document.getElementById("status").innerHTML = "Opening Camera...";
+
+    Quagga.init({
+
+        inputStream : {
+            name : "Live",
+            type : "LiveStream",
+            target: document.querySelector('#scanner'),
+            constraints: {
+                facingMode: "environment"
+            }
+        },
+
+        decoder : {
+            readers : [
+                "ean_reader",
+                "ean_8_reader",
+                "code_128_reader"
+            ]
+        }
+
+    }, function(err) {
+
+        if (err) {
+            console.log(err);
+            alert("Camera not working. Please allow camera permission.");
+            return;
+        }
+
+        Quagga.start();
+
+        document.getElementById("status").innerHTML = "Scanner Started - Scan Product Barcode";
+
+    });
+
 }
 
-/* LOCATION */
-const text=document.getElementById("locationText");
+Quagga.onDetected(function(data){
 
-function set(msg){
-    text.innerText=msg;
-}
+    let code = data.codeResult.code;
 
-function getLocation(){
-
-    if(!navigator.geolocation){
-        set("Location not supported");
+    if(scannedCodes.includes(code)){
         return;
     }
 
-    set("Detecting location...");
+    scannedCodes.push(code);
 
-    navigator.geolocation.getCurrentPosition(
+    addProduct(code);
 
-        async (pos)=>{
+});
 
-            let lat=pos.coords.latitude;
-            let lon=pos.coords.longitude;
+function addProduct(code){
 
-            try{
-                let res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-                let data=await res.json();
+    let table = document.getElementById("billTable");
 
-                let addr=data.address||{};
+    let product = products[code];
 
-                let place=
-                    addr.village||
-                    addr.town||
-                    addr.suburb||
-                    addr.city||
-                    addr.district||
-                    addr.state||
-                    "Your area";
+    if(product){
 
-                set("📍 "+place+", India");
+        let row = table.insertRow();
 
-            }catch(e){
-                set("📍 Location found");
-            }
+        let total = product.price * 1;
 
-        },
+        row.innerHTML = `
 
-        ()=>{
-            set("📍 Allow location permission");
-        },
+            <td>${code}</td>
+            <td>${product.name}</td>
+            <td>₹ ${product.price}</td>
+            <td>1</td>
+            <td class="rowTotal">₹ ${total}</td>
 
-        {
-            enableHighAccuracy:true,
-            timeout:12000
-        }
-    );
+        `;
+
+        calculateGrandTotal();
+
+        document.getElementById("status").innerHTML = product.name + " Added Successfully";
+
+    }else{
+
+        let row = table.insertRow();
+
+        row.innerHTML = `
+
+            <td>${code}</td>
+            <td>Product Not Found</td>
+            <td>₹ 0</td>
+            <td>1</td>
+            <td class="rowTotal">₹ 0</td>
+
+        `;
+
+        document.getElementById("status").innerHTML = "Unknown Product Barcode";
+
+    }
+
 }
 
-window.onload=getLocation;
+function calculateGrandTotal(){
+
+    let totals = document.querySelectorAll('.rowTotal');
+
+    let grand = 0;
+
+    totals.forEach(function(item){
+
+        let value = item.innerText.replace('₹','').trim();
+
+        grand += Number(value);
+
+    });
+
+    document.getElementById("grandTotal").innerHTML = grand;
+
+}
 
 </script>
 
 </body>
 </html>
+

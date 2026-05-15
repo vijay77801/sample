@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cezo Scanner</title>
 
-<!-- Barcode Scanner -->
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
@@ -22,71 +21,12 @@ body{
     padding:15px;
 }
 
-/* Splash */
-
-.splash{
-    position:fixed;
-    width:100%;
-    height:100vh;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:999;
-    animation:hideSplash 1s forwards;
-    animation-delay:3s;
-}
-
-.logo{
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    background:#ff9800;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-    font-size:45px;
-    font-weight:bold;
-    animation:zoom 2s infinite;
-}
-
-.name{
-    color:white;
-    font-size:34px;
-    margin-top:20px;
-}
-
-.loading{
-    width:220px;
-    height:8px;
-    background:#333;
-    border-radius:10px;
-    overflow:hidden;
-    margin-top:20px;
-}
-
-.loading span{
-    display:block;
-    width:0%;
-    height:100%;
-    background:#ff9800;
-    animation:load 3s linear forwards;
-}
-
-/* Main */
-
-.main{
-    display:none;
-}
-
 .header{
     background:black;
     color:white;
+    text-align:center;
     padding:18px;
     border-radius:15px;
-    text-align:center;
     font-size:28px;
     font-weight:bold;
 }
@@ -95,9 +35,8 @@ body{
     width:100%;
     margin-top:20px;
     background:white;
-    border-radius:15px;
-    overflow:hidden;
     padding:10px;
+    border-radius:15px;
 }
 
 .scan-btn{
@@ -134,126 +73,38 @@ body{
 
 .card h2{
     margin-top:10px;
-    color:#111;
 }
 
 .card p{
     margin-top:8px;
     font-size:18px;
-    color:#444;
-}
-
-.total{
-    margin-top:20px;
-    background:green;
-    color:white;
-    padding:18px;
-    border-radius:15px;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-}
-
-/* Animation */
-
-@keyframes zoom{
-
-    50%{
-        transform:scale(1.2);
-    }
-
-}
-
-@keyframes load{
-
-    100%{
-        width:100%;
-    }
-
-}
-
-@keyframes hideSplash{
-
-    to{
-        opacity:0;
-        visibility:hidden;
-    }
-
 }
 
 </style>
 </head>
 <body>
 
-<!-- Splash -->
-
-<div class="splash">
-
-    <div class="logo">
-        C
-    </div>
-
-    <div class="name">
-        CEZO SCANNER
-    </div>
-
-    <div class="loading">
-        <span></span>
-    </div>
-
+<div class="header">
+    CEZO SCANNER
 </div>
 
-<!-- Main -->
+<div id="reader"></div>
 
-<div class="main" id="main">
+<button class="scan-btn" onclick="startScanner()">
+    Open Back Camera Scanner
+</button>
 
-    <div class="header">
-        CEZO SCANNER
-    </div>
-
-    <div id="reader"></div>
-
-    <button class="scan-btn" onclick="startScanner()">
-        Open Back Camera Scanner
-    </button>
-
-    <div class="status" id="status">
-        Click Camera To Scan Product
-    </div>
-
-    <div id="products"></div>
-
-    <div class="total">
-        Grand Total : ₹ <span id="grand">0</span>
-    </div>
-
+<div class="status" id="status">
+    Scan Product Barcode
 </div>
+
+<div id="products"></div>
 
 <script>
 
-/* Splash */
-
-setTimeout(function(){
-
-    document.getElementById("main").style.display = "block";
-
-},3000);
-
-/* Variables */
-
-let total = 0;
 let scanned = [];
-let scannerStarted = false;
-
-/* Start Scanner */
 
 function startScanner(){
-
-    if(scannerStarted){
-        return;
-    }
-
-    scannerStarted = true;
 
     const html5QrCode = new Html5Qrcode("reader");
 
@@ -284,34 +135,36 @@ function startScanner(){
                 scanned.push(code);
 
                 document.getElementById("status").innerHTML =
-                "Searching Product...";
+                "Searching Exact Product...";
 
                 try{
 
-                    /* Barcode Lookup API */
+                    /* REAL PRODUCT DATABASE */
 
                     let response =
-                    await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+                    await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json`);
 
                     let data =
                     await response.json();
 
                     let productName =
-                    data.product?.product_name ||
-                    data.product?.brands ||
-                    data.product?.generic_name;
+                    data.product?.product_name;
+
+                    let brand =
+                    data.product?.brands;
 
                     let image =
                     data.product?.image_front_url;
 
-                    /* If Product Not Found */
-
                     if(!productName){
 
-                        /* Google Like Fallback */
+                        productName = "Exact Product Not Found";
 
-                        productName =
-                        "Product Found";
+                    }
+
+                    if(!brand){
+
+                        brand = "Unknown Brand";
 
                     }
 
@@ -322,21 +175,6 @@ function startScanner(){
 
                     }
 
-                    let price =
-                    Math.floor(Math.random()*500)+20;
-
-                    let quantity = 1;
-
-                    let final =
-                    quantity * price;
-
-                    total += final;
-
-                    document.getElementById("grand").innerHTML =
-                    total;
-
-                    /* Product Card */
-
                     document.getElementById("products").innerHTML += `
 
                     <div class="card">
@@ -345,20 +183,16 @@ function startScanner(){
 
                         <h2>${productName}</h2>
 
+                        <p><b>Brand :</b> ${brand}</p>
+
                         <p><b>Barcode :</b> ${code}</p>
-
-                        <p><b>Price :</b> ₹ ${price}</p>
-
-                        <p><b>Quantity :</b> ${quantity}</p>
-
-                        <p><b>Total :</b> ₹ ${final}</p>
 
                     </div>
 
                     `;
 
                     document.getElementById("status").innerHTML =
-                    productName + " Added Successfully";
+                    productName;
 
                 }catch(error){
 
@@ -370,10 +204,6 @@ function startScanner(){
             }
 
         );
-
-    }).catch(err => {
-
-        alert("Please Allow Camera Permission");
 
     });
 

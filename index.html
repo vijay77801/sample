@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cezo Scanner</title>
 
+<!-- Barcode Scanner -->
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
@@ -42,10 +43,10 @@ body{
     height:120px;
     border-radius:50%;
     background:#ff9800;
-    color:white;
     display:flex;
     justify-content:center;
     align-items:center;
+    color:white;
     font-size:45px;
     font-weight:bold;
     animation:zoom 2s infinite;
@@ -127,17 +128,19 @@ body{
 
 .card img{
     width:100%;
-    height:180px;
+    height:200px;
     object-fit:contain;
 }
 
 .card h2{
     margin-top:10px;
+    color:#111;
 }
 
 .card p{
     margin-top:8px;
     font-size:18px;
+    color:#444;
 }
 
 .total{
@@ -215,7 +218,7 @@ body{
     </button>
 
     <div class="status" id="status">
-        Click Camera To Scan Products
+        Click Camera To Scan Product
     </div>
 
     <div id="products"></div>
@@ -281,11 +284,11 @@ function startScanner(){
                 scanned.push(code);
 
                 document.getElementById("status").innerHTML =
-                "Scanning Product...";
+                "Searching Product...";
 
                 try{
 
-                    /* Product API */
+                    /* Barcode Lookup API */
 
                     let response =
                     await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
@@ -296,14 +299,28 @@ function startScanner(){
                     let productName =
                     data.product?.product_name ||
                     data.product?.brands ||
-                    data.product?.generic_name ||
-                    "Scanned Product";
+                    data.product?.generic_name;
 
                     let image =
-                    data.product?.image_front_url ||
-                    "https://cdn-icons-png.flaticon.com/512/3081/3081559.png";
+                    data.product?.image_front_url;
 
-                    /* Random Demo Price */
+                    /* If Product Not Found */
+
+                    if(!productName){
+
+                        /* Google Like Fallback */
+
+                        productName =
+                        "Product Found";
+
+                    }
+
+                    if(!image){
+
+                        image =
+                        "https://cdn-icons-png.flaticon.com/512/3081/3081559.png";
+
+                    }
 
                     let price =
                     Math.floor(Math.random()*500)+20;
@@ -311,12 +328,14 @@ function startScanner(){
                     let quantity = 1;
 
                     let final =
-                    price * quantity;
+                    quantity * price;
 
                     total += final;
 
                     document.getElementById("grand").innerHTML =
                     total;
+
+                    /* Product Card */
 
                     document.getElementById("products").innerHTML += `
 

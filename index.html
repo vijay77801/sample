@@ -21,7 +21,7 @@ body{
     overflow-x:hidden;
 }
 
-/* Splash Screen */
+/* Splash */
 
 .splash{
     position:fixed;
@@ -42,10 +42,10 @@ body{
     height:120px;
     border-radius:50%;
     background:#ff9800;
-    color:white;
     display:flex;
     justify-content:center;
     align-items:center;
+    color:white;
     font-size:45px;
     font-weight:bold;
     animation:zoom 2s infinite;
@@ -74,7 +74,7 @@ body{
     animation:load 3s linear forwards;
 }
 
-/* Main Page */
+/* Main */
 
 .main{
     display:none;
@@ -244,84 +244,41 @@ let scanned = [];
 let scannerStarted = false;
 let html5QrCode;
 
-/* Product Search */
+/* Demo Product Database */
 
-async function getProduct(code){
+const products = {
 
-    document.getElementById("status").innerHTML =
-    "Searching Product...";
+    "8901030895488":{
+        name:"Maggi Noodles",
+        price:20,
+        image:"https://m.media-amazon.com/images/I/81XQ5znwK-L.jpg"
+    },
 
-    try{
+    "8901491101831":{
+        name:"Coca Cola",
+        price:40,
+        image:"https://m.media-amazon.com/images/I/61X0ISBpD-L.jpg"
+    },
 
-        let response =
-        await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+    "8906009459621":{
+        name:"Dairy Milk Chocolate",
+        price:50,
+        image:"https://m.media-amazon.com/images/I/71oA6zL3n4L.jpg"
+    },
 
-        let data =
-        await response.json();
+    "8902519012333":{
+        name:"Parle G Biscuits",
+        price:10,
+        image:"https://m.media-amazon.com/images/I/71D4AL7Y0oL.jpg"
+    },
 
-        if(data.status == 1){
-
-            let product =
-            data.product.product_name ||
-            "Super Market Product";
-
-            let image =
-            data.product.image_front_small_url ||
-            "https://via.placeholder.com/200";
-
-            let quantity = 1;
-
-            /* Demo Price */
-
-            let price =
-            Math.floor(Math.random()*500)+20;
-
-            let final =
-            quantity * price;
-
-            total += final;
-
-            document.getElementById("grand").innerHTML =
-            total;
-
-            document.getElementById("products").innerHTML += `
-
-            <div class="card">
-
-                <img src="${image}">
-
-                <h2>${product}</h2>
-
-                <p><b>Barcode :</b> ${code}</p>
-
-                <p><b>Price :</b> ₹ ${price}</p>
-
-                <p><b>Quantity :</b> ${quantity}</p>
-
-                <p><b>Total :</b> ₹ ${final}</p>
-
-            </div>
-
-            `;
-
-            document.getElementById("status").innerHTML =
-            product + " Added Successfully";
-
-        }else{
-
-            document.getElementById("status").innerHTML =
-            "Product Not Found";
-
-        }
-
-    }catch(error){
-
-        document.getElementById("status").innerHTML =
-        "Internet Error";
-
+    "8901063010413":{
+        name:"Lays Chips",
+        price:20,
+        image:"https://m.media-amazon.com/images/I/71M8MUt0mlL.jpg"
     }
 
-}
+};
 
 /* Start Scanner */
 
@@ -357,7 +314,84 @@ async function startScanner(){
 
                 scanned.push(code);
 
-                getProduct(code);
+                document.getElementById("status").innerHTML =
+                "Scanning Product...";
+
+                let product = products[code];
+
+                /* If Barcode Exists */
+
+                if(product){
+
+                    let quantity = 1;
+
+                    let final =
+                    product.price * quantity;
+
+                    total += final;
+
+                    document.getElementById("grand").innerHTML =
+                    total;
+
+                    document.getElementById("products").innerHTML += `
+
+                    <div class="card">
+
+                        <img src="${product.image}">
+
+                        <h2>${product.name}</h2>
+
+                        <p><b>Barcode :</b> ${code}</p>
+
+                        <p><b>Price :</b> ₹ ${product.price}</p>
+
+                        <p><b>Quantity :</b> ${quantity}</p>
+
+                        <p><b>Total :</b> ₹ ${final}</p>
+
+                    </div>
+
+                    `;
+
+                    document.getElementById("status").innerHTML =
+                    product.name + " Added Successfully";
+
+                }else{
+
+                    /* Unknown Product */
+
+                    let randomPrice =
+                    Math.floor(Math.random()*500)+20;
+
+                    total += randomPrice;
+
+                    document.getElementById("grand").innerHTML =
+                    total;
+
+                    document.getElementById("products").innerHTML += `
+
+                    <div class="card">
+
+                        <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
+
+                        <h2>Super Market Product</h2>
+
+                        <p><b>Barcode :</b> ${code}</p>
+
+                        <p><b>Price :</b> ₹ ${randomPrice}</p>
+
+                        <p><b>Quantity :</b> 1</p>
+
+                        <p><b>Total :</b> ₹ ${randomPrice}</p>
+
+                    </div>
+
+                    `;
+
+                    document.getElementById("status").innerHTML =
+                    "Product Added Successfully";
+
+                }
 
             }
 

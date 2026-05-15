@@ -42,10 +42,10 @@ body{
     height:120px;
     border-radius:50%;
     background:#ff9800;
+    color:white;
     display:flex;
     justify-content:center;
     align-items:center;
-    color:white;
     font-size:45px;
     font-weight:bold;
     animation:zoom 2s infinite;
@@ -55,7 +55,6 @@ body{
     color:white;
     font-size:34px;
     margin-top:20px;
-    letter-spacing:2px;
 }
 
 .loading{
@@ -63,8 +62,8 @@ body{
     height:8px;
     background:#333;
     border-radius:10px;
-    margin-top:25px;
     overflow:hidden;
+    margin-top:20px;
 }
 
 .loading span{
@@ -85,9 +84,9 @@ body{
 .header{
     background:black;
     color:white;
-    text-align:center;
     padding:18px;
     border-radius:15px;
+    text-align:center;
     font-size:28px;
     font-weight:bold;
 }
@@ -95,20 +94,19 @@ body{
 #reader{
     width:100%;
     margin-top:20px;
+    background:white;
     border-radius:15px;
     overflow:hidden;
-    background:white;
     padding:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .scan-btn{
     width:100%;
     padding:15px;
     border:none;
-    border-radius:12px;
     background:#ff9800;
     color:white;
+    border-radius:12px;
     font-size:20px;
     margin-top:15px;
 }
@@ -118,7 +116,6 @@ body{
     margin-top:15px;
     font-size:18px;
     font-weight:bold;
-    color:#222;
 }
 
 .card{
@@ -126,7 +123,6 @@ body{
     margin-top:20px;
     padding:15px;
     border-radius:15px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -137,13 +133,11 @@ body{
 
 .card h2{
     margin-top:10px;
-    color:#111;
 }
 
 .card p{
     margin-top:8px;
     font-size:18px;
-    color:#444;
 }
 
 .total{
@@ -217,11 +211,11 @@ body{
     <div id="reader"></div>
 
     <button class="scan-btn" onclick="startScanner()">
-        Open Camera Scanner
+        Open Back Camera Scanner
     </button>
 
     <div class="status" id="status">
-        Click Camera To Scan Product
+        Click Camera To Scan Products
     </div>
 
     <div id="products"></div>
@@ -234,17 +228,24 @@ body{
 
 <script>
 
+/* Splash */
+
 setTimeout(function(){
 
     document.getElementById("main").style.display="block";
 
 },3000);
 
+/* Variables */
+
 let total = 0;
 let scanned = [];
 let scannerStarted = false;
+let html5QrCode;
 
-function startScanner(){
+/* Start Scanner */
+
+async function startScanner(){
 
     if(scannerStarted){
         return;
@@ -252,114 +253,113 @@ function startScanner(){
 
     scannerStarted = true;
 
-    Html5Qrcode.getCameras().then(devices => {
+    document.getElementById("status").innerHTML =
+    "Opening Back Camera...";
 
-        if(devices && devices.length){
+    html5QrCode = new Html5Qrcode("reader");
 
-            let cameraId = devices[0].id;
+    try{
 
-            const html5QrCode =
-            new Html5Qrcode("reader");
+        await html5QrCode.start(
 
-            html5QrCode.start(
+            {
+                facingMode:"environment"
+            },
 
-                cameraId,
+            {
+                fps:10,
+                qrbox:250
+            },
 
-                {
-                    fps:10,
-                    qrbox:250
-                },
+            async function(code){
 
-                async function(code){
+                if(scanned.includes(code)){
+                    return;
+                }
 
-                    if(scanned.includes(code)){
-                        return;
-                    }
+                scanned.push(code);
 
-                    scanned.push(code);
+                document.getElementById("status").innerHTML =
+                "Scanning Product...";
 
-                    document.getElementById("status").innerHTML =
-                    "Scanning Product...";
+                try{
 
-                    try{
+                    let response =
+                    await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
 
-                        let response =
-                        await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+                    let data =
+                    await response.json();
 
-                        let data =
-                        await response.json();
+                    if(data.status == 1){
 
-                        if(data.status == 1){
+                        let product =
+                        data.product.product_name ||
+                        "Super Market Product";
 
-                            let product =
-                            data.product.product_name ||
-                            "Super Market Product";
+                        let image =
+                        data.product.image_front_small_url ||
+                        "https://via.placeholder.com/200";
 
-                            let image =
-                            data.product.image_front_small_url ||
-                            "https://via.placeholder.com/200";
+                        let quantity = 1;
 
-                            let quantity = 1;
+                        let price =
+                        Math.floor(Math.random()*500)+20;
 
-                            let price =
-                            Math.floor(Math.random()*500)+20;
+                        let final =
+                        quantity * price;
 
-                            let final =
-                            quantity * price;
+                        total += final;
 
-                            total += final;
+                        document.getElementById("grand").innerHTML =
+                        total;
 
-                            document.getElementById("grand").innerHTML =
-                            total;
+                        document.getElementById("products").innerHTML += `
 
-                            document.getElementById("products").innerHTML += `
+                        <div class="card">
 
-                            <div class="card">
+                            <img src="${image}">
 
-                                <img src="${image}">
+                            <h2>${product}</h2>
 
-                                <h2>${product}</h2>
+                            <p><b>Barcode :</b> ${code}</p>
 
-                                <p><b>Barcode :</b> ${code}</p>
+                            <p><b>Price :</b> ₹ ${price}</p>
 
-                                <p><b>Price :</b> ₹ ${price}</p>
+                            <p><b>Quantity :</b> ${quantity}</p>
 
-                                <p><b>Quantity :</b> ${quantity}</p>
+                            <p><b>Total :</b> ₹ ${final}</p>
 
-                                <p><b>Total :</b> ₹ ${final}</p>
+                        </div>
 
-                            </div>
-
-                            `;
-
-                            document.getElementById("status").innerHTML =
-                            product + " Added Successfully";
-
-                        }else{
-
-                            document.getElementById("status").innerHTML =
-                            "Product Not Found";
-
-                        }
-
-                    }catch(error){
+                        `;
 
                         document.getElementById("status").innerHTML =
-                        "Internet Error";
+                        product + " Added Successfully";
+
+                    }else{
+
+                        document.getElementById("status").innerHTML =
+                        "Product Not Found";
 
                     }
+
+                }catch(error){
+
+                    document.getElementById("status").innerHTML =
+                    "Internet Error";
 
                 }
 
-            );
+            }
 
-        }
+        );
 
-    }).catch(err => {
+    }catch(error){
 
-        alert("Please Allow Camera Permission");
+        document.getElementById("status").innerHTML =
+        "Please Allow Camera Permission";
 
-    });
+    }
 
 }
 

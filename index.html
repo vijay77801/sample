@@ -18,7 +18,7 @@
 
 body{
     background:#f2f2f2;
-    overflow-x:hidden;
+    padding:15px;
 }
 
 /* Splash */
@@ -32,7 +32,7 @@ body{
     justify-content:center;
     align-items:center;
     flex-direction:column;
-    z-index:1000;
+    z-index:999;
     animation:hideSplash 1s forwards;
     animation-delay:3s;
 }
@@ -42,10 +42,10 @@ body{
     height:120px;
     border-radius:50%;
     background:#ff9800;
+    color:white;
     display:flex;
     justify-content:center;
     align-items:center;
-    color:white;
     font-size:45px;
     font-weight:bold;
     animation:zoom 2s infinite;
@@ -78,7 +78,6 @@ body{
 
 .main{
     display:none;
-    padding:15px;
 }
 
 .header{
@@ -242,47 +241,10 @@ setTimeout(function(){
 let total = 0;
 let scanned = [];
 let scannerStarted = false;
-let html5QrCode;
-
-/* Demo Product Database */
-
-const products = {
-
-    "8901030895488":{
-        name:"Maggi Noodles",
-        price:20,
-        image:"https://m.media-amazon.com/images/I/81XQ5znwK-L.jpg"
-    },
-
-    "8901491101831":{
-        name:"Coca Cola",
-        price:40,
-        image:"https://m.media-amazon.com/images/I/61X0ISBpD-L.jpg"
-    },
-
-    "8906009459621":{
-        name:"Dairy Milk Chocolate",
-        price:50,
-        image:"https://m.media-amazon.com/images/I/71oA6zL3n4L.jpg"
-    },
-
-    "8902519012333":{
-        name:"Parle G Biscuits",
-        price:10,
-        image:"https://m.media-amazon.com/images/I/71D4AL7Y0oL.jpg"
-    },
-
-    "8901063010413":{
-        name:"Lays Chips",
-        price:20,
-        image:"https://m.media-amazon.com/images/I/71M8MUt0mlL.jpg"
-    }
-
-};
 
 /* Start Scanner */
 
-async function startScanner(){
+function startScanner(){
 
     if(scannerStarted){
         return;
@@ -290,16 +252,20 @@ async function startScanner(){
 
     scannerStarted = true;
 
-    html5QrCode =
-    new Html5Qrcode("reader");
+    const html5QrCode = new Html5Qrcode("reader");
 
-    try{
+    Html5Qrcode.getCameras().then(devices => {
 
-        await html5QrCode.start(
+        let backCamera = devices.find(device =>
+            device.label.toLowerCase().includes("back")
+        );
 
-            {
-                facingMode:"environment"
-            },
+        let cameraId =
+        backCamera ? backCamera.id : devices[0].id;
+
+        html5QrCode.start(
+
+            cameraId,
 
             {
                 fps:10,
@@ -317,16 +283,35 @@ async function startScanner(){
                 document.getElementById("status").innerHTML =
                 "Scanning Product...";
 
-                let product = products[code];
+                try{
 
-                /* If Barcode Exists */
+                    /* Product API */
 
-                if(product){
+                    let response =
+                    await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+
+                    let data =
+                    await response.json();
+
+                    let productName =
+                    data.product?.product_name ||
+                    data.product?.brands ||
+                    data.product?.generic_name ||
+                    "Scanned Product";
+
+                    let image =
+                    data.product?.image_front_url ||
+                    "https://cdn-icons-png.flaticon.com/512/3081/3081559.png";
+
+                    /* Random Demo Price */
+
+                    let price =
+                    Math.floor(Math.random()*500)+20;
 
                     let quantity = 1;
 
                     let final =
-                    product.price * quantity;
+                    price * quantity;
 
                     total += final;
 
@@ -337,13 +322,13 @@ async function startScanner(){
 
                     <div class="card">
 
-                        <img src="${product.image}">
+                        <img src="${image}">
 
-                        <h2>${product.name}</h2>
+                        <h2>${productName}</h2>
 
                         <p><b>Barcode :</b> ${code}</p>
 
-                        <p><b>Price :</b> ₹ ${product.price}</p>
+                        <p><b>Price :</b> ₹ ${price}</p>
 
                         <p><b>Quantity :</b> ${quantity}</p>
 
@@ -354,42 +339,12 @@ async function startScanner(){
                     `;
 
                     document.getElementById("status").innerHTML =
-                    product.name + " Added Successfully";
+                    productName + " Added Successfully";
 
-                }else{
-
-                    /* Unknown Product */
-
-                    let randomPrice =
-                    Math.floor(Math.random()*500)+20;
-
-                    total += randomPrice;
-
-                    document.getElementById("grand").innerHTML =
-                    total;
-
-                    document.getElementById("products").innerHTML += `
-
-                    <div class="card">
-
-                        <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
-
-                        <h2>Super Market Product</h2>
-
-                        <p><b>Barcode :</b> ${code}</p>
-
-                        <p><b>Price :</b> ₹ ${randomPrice}</p>
-
-                        <p><b>Quantity :</b> 1</p>
-
-                        <p><b>Total :</b> ₹ ${randomPrice}</p>
-
-                    </div>
-
-                    `;
+                }catch(error){
 
                     document.getElementById("status").innerHTML =
-                    "Product Added Successfully";
+                    "Internet Error";
 
                 }
 
@@ -397,12 +352,11 @@ async function startScanner(){
 
         );
 
-    }catch(error){
+    }).catch(err => {
 
-        document.getElementById("status").innerHTML =
-        "Please Allow Camera Permission";
+        alert("Please Allow Camera Permission");
 
-    }
+    });
 
 }
 

@@ -1,532 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cezooo Billing</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://unpkg.com/html5-qrcode"></script>
+  <title>Advanced Signup Form</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
+  <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:linear-gradient(180deg,#111,#1f1f1f,#2b2b2b);
-    overflow-x:hidden;
-    color:white;
-    padding:15px;
-}
-
-/* Splash Screen */
-
-.splash{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100vh;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:9999;
-    animation:hideSplash 1s forwards;
-    animation-delay:4s;
-}
-
-.logo{
-    width:150px;
-    height:150px;
-    border-radius:50%;
-    background:linear-gradient(45deg,#ff9800,#ff5722);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-    font-size:60px;
-    font-weight:bold;
-    box-shadow:0 0 50px #ff9800;
-    animation:zoom 2s infinite;
-}
-
-.title{
-    width:100%;
-    text-align:center;
-    color:white;
-    font-size:42px;
-    font-weight:bold;
-    margin-top:25px;
-    letter-spacing:3px;
-    text-shadow:0 0 20px #ff9800;
-    padding:0 10px;
-}
-
-.loading{
-    width:260px;
-    height:8px;
-    background:#333;
-    border-radius:10px;
-    overflow:hidden;
-    margin-top:30px;
-}
-
-.loading span{
-    display:block;
-    width:0%;
-    height:100%;
-    background:linear-gradient(90deg,#ff9800,#ff5722);
-    animation:load 4s linear forwards;
-}
-
-/* Main */
-
-.main{
-    display:none;
-    padding-bottom:100px;
-}
-
-/* Header */
-
-.header{
-    background:linear-gradient(45deg,#ff9800,#ff5722);
-    padding:20px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 5px 20px rgba(255,152,0,0.5);
-}
-
-.header h1{
-    font-size:34px;
-}
-
-.header p{
-    margin-top:8px;
-    opacity:0.9;
-}
-
-/* Scanner */
-
-.scanner-box{
-    margin-top:20px;
-    background:#1f1f1f;
-    padding:15px;
-    border-radius:20px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.4);
-}
-
-#reader{
-    width:100%;
-    border-radius:15px;
-    overflow:hidden;
-}
-
-/* Buttons */
-
-.scan-btn,
-.search-btn{
-
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:15px;
-    font-size:20px;
-    font-weight:bold;
-    margin-top:15px;
-    cursor:pointer;
-    transition:0.3s;
-
-}
-
-.scan-btn{
-    background:linear-gradient(45deg,#ff9800,#ff5722);
-    color:white;
-}
-
-.search-btn{
-    background:white;
-    color:#111;
-}
-
-.scan-btn:hover,
-.search-btn:hover{
-    transform:scale(1.03);
-}
-
-/* Status */
-
-.status{
-    margin-top:18px;
-    text-align:center;
-    font-size:18px;
-    font-weight:bold;
-    color:#ffcc80;
-}
-
-/* Search */
-
-.search-box{
-    margin-top:25px;
-}
-
-.search-input{
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:15px;
-    background:#1f1f1f;
-    color:white;
-    font-size:18px;
-    outline:none;
-    box-shadow:0 4px 15px rgba(0,0,0,0.3);
-}
-
-/* Product Card */
-
-.card{
-    margin-top:25px;
-    background:#1f1f1f;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 6px 20px rgba(0,0,0,0.4);
-    animation:cardPop 0.5s ease;
-}
-
-.card img{
-    width:100%;
-    height:240px;
-    object-fit:contain;
-    background:white;
-}
-
-.card-content{
-    padding:18px;
-}
-
-.card-content h2{
-    color:#ff9800;
-    font-size:26px;
-}
-
-.card-content p{
-    margin-top:10px;
-    font-size:18px;
-    color:#ddd;
-}
-
-/* Bottom Nav */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:#111;
-    padding:14px;
-    display:flex;
-    justify-content:space-around;
-    border-top:2px solid #ff9800;
-}
-
-.bottom-nav i{
-    color:white;
-    font-size:24px;
-}
-
-/* Animations */
-
-@keyframes zoom{
-
-    50%{
-        transform:scale(1.1);
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
     }
 
-}
-
-@keyframes load{
-
-    100%{
-        width:100%;
+    body{
+      background:linear-gradient(135deg,#4facfe,#00f2fe);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
     }
 
-}
-
-@keyframes hideSplash{
-
-    to{
-        opacity:0;
-        visibility:hidden;
+    .container{
+      width:420px;
+      background:#fff;
+      padding:30px;
+      border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.2);
     }
 
-}
-
-@keyframes cardPop{
-
-    from{
-        transform:scale(0.8);
-        opacity:0;
+    h2{
+      text-align:center;
+      margin-bottom:20px;
+      color:#333;
     }
 
-    to{
-        transform:scale(1);
-        opacity:1;
+    .input-box{
+      margin-bottom:15px;
     }
 
-}
+    .input-box label{
+      display:block;
+      margin-bottom:5px;
+      font-weight:bold;
+      color:#444;
+    }
 
-</style>
+    .input-box input,
+    .input-box textarea{
+      width:100%;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      font-size:16px;
+      outline:none;
+    }
+
+    .input-box input:focus,
+    .input-box textarea:focus{
+      border-color:#4facfe;
+    }
+
+    textarea{
+      resize:none;
+      height:80px;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:8px;
+      background:#4facfe;
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#00c6fb;
+    }
+
+    #message{
+      margin-top:15px;
+      text-align:center;
+      font-weight:bold;
+    }
+
+  </style>
+
 </head>
 <body>
 
-<!-- Splash -->
+  <div class="container">
 
-<div class="splash">
+    <h2>User Signup Form</h2>
 
-    <div class="logo">
-        C
+    <div class="input-box">
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="Enter full name">
     </div>
 
-    <div class="title">
-        CEZOOO BILLING
+    <div class="input-box">
+      <label>User Name</label>
+      <input type="text" id="username" placeholder="Enter username">
     </div>
 
-    <div class="loading">
-        <span></span>
+    <div class="input-box">
+      <label>Mobile Number</label>
+      <input type="text" id="mobile" placeholder="Enter mobile number">
     </div>
 
-</div>
-
-<!-- Main -->
-
-<div class="main" id="main">
-
-    <!-- Header -->
-
-    <div class="header">
-
-        <h1>CEZOOO BILLING</h1>
-
-        <p>Smart Barcode Billing Scanner</p>
-
+    <div class="input-box">
+      <label>Location</label>
+      <input type="text" id="location" placeholder="Enter location">
     </div>
 
-    <!-- Scanner -->
-
-    <div class="scanner-box">
-
-        <div id="reader"></div>
-
-        <button class="scan-btn" onclick="startScanner()">
-            <i class="fa-solid fa-camera"></i>
-            Scan Product Barcode
-        </button>
-
-        <div class="status" id="status">
-            Ready To Scan Products
-        </div>
-
+    <div class="input-box">
+      <label>Address</label>
+      <textarea id="address" placeholder="Enter address"></textarea>
     </div>
 
-    <!-- Products -->
-
-    <div id="products"></div>
-
-    <!-- Search -->
-
-    <div class="search-box">
-
-        <input 
-        type="text"
-        id="manualBarcode"
-        class="search-input"
-        placeholder="Enter Barcode Number">
-
-        <button 
-        class="search-btn"
-        onclick="searchBarcode()">
-
-        <i class="fa-solid fa-magnifying-glass"></i>
-        Search Product
-
-        </button>
-
+    <div class="input-box">
+      <label>Details</label>
+      <textarea id="details" placeholder="Enter details"></textarea>
     </div>
 
-</div>
-
-<!-- Bottom Navigation -->
-
-<div class="bottom-nav">
-
-    <i class="fa-solid fa-house"></i>
-
-    <i class="fa-solid fa-barcode"></i>
-
-    <i class="fa-solid fa-cart-shopping"></i>
-
-    <i class="fa-solid fa-user"></i>
-
-</div>
-
-<script>
-
-/* Show Main */
-
-setTimeout(function(){
-
-    document.getElementById("main").style.display="block";
-
-},4000);
-
-let scanned = [];
-
-/* Show Product */
-
-function showProduct(productName,brand,image,code){
-
-    document.getElementById("products").innerHTML += `
-
-    <div class="card">
-
-        <img src="${image}">
-
-        <div class="card-content">
-
-            <h2>${productName}</h2>
-
-            <p><b>Brand :</b> ${brand}</p>
-
-            <p><b>Barcode :</b> ${code}</p>
-
-        </div>
-
+    <div class="input-box">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password">
     </div>
 
-    `;
+    <button onclick="signup()">Create Account</button>
 
-    document.getElementById("status").innerHTML =
-    productName + " Found";
+    <div id="message"></div>
 
-}
+  </div>
 
-/* Start Scanner */
+  <script>
 
-function startScanner(){
+    // ====================================
+    // SUPABASE URL & ANON KEY
+    // ====================================
 
-    const html5QrCode =
-    new Html5Qrcode("reader");
+    const SUPABASE_URL =
+      "https://ipudyahkijaofyuhzdtv.supabase.co";
 
-    Html5Qrcode.getCameras().then(devices => {
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_sEOEdQLjc99aRtQPVEPDTQ_PczbVtB3";
 
-        let backCamera = devices.find(device =>
-            device.label.toLowerCase().includes("back")
-        );
+    // ====================================
 
-        let cameraId =
-        backCamera ? backCamera.id : devices[0].id;
+    const client = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-        html5QrCode.start(
+    async function signup(){
 
-            cameraId,
+      const name = document.getElementById("name").value;
+      const username = document.getElementById("username").value;
+      const mobile = document.getElementById("mobile").value;
+      const location = document.getElementById("location").value;
+      const address = document.getElementById("address").value;
+      const details = document.getElementById("details").value;
+      const password = document.getElementById("password").value;
 
-            {
-                fps:10,
-                qrbox:250
-            },
-
-            async function(code){
-
-                if(scanned.includes(code)){
-                    return;
-                }
-
-                scanned.push(code);
-
-                document.getElementById("status").innerHTML =
-                "Searching Product...";
-
-                searchProduct(code);
-
-            }
-
-        );
-
-    });
-
-}
-
-/* Search Product */
-
-async function searchProduct(code){
-
-    try{
-
-        let response =
-        await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json`);
-
-        let data =
-        await response.json();
-
-        let productName =
-        data.product?.product_name ||
-        "Product Found";
-
-        let brand =
-        data.product?.brands ||
-        "Unknown Brand";
-
-        let image =
-        data.product?.image_front_url ||
-        "https://cdn-icons-png.flaticon.com/512/3081/3081559.png";
-
-        showProduct(
-            productName,
-            brand,
-            image,
-            code
-        );
-
-    }catch(error){
-
-        document.getElementById("status").innerHTML =
-        "Internet Error";
-
-    }
-
-}
-
-/* Manual Search */
-
-function searchBarcode(){
-
-    let code =
-    document.getElementById("manualBarcode").value;
-
-    if(code==""){
-
-        alert("Enter Barcode");
-
+      // Validation
+      if(
+        name === "" ||
+        username === "" ||
+        mobile === "" ||
+        location === "" ||
+        address === "" ||
+        details === "" ||
+        password === ""
+      ){
+        alert("Please fill all fields");
         return;
+      }
 
+      if(mobile.length !== 10){
+        alert("Enter valid 10 digit mobile number");
+        return;
+      }
+
+      // Insert data into users table
+      const { data, error } = await client
+        .from("users")
+        .insert([
+          {
+            name: name,
+            username: username,
+            mobile: mobile,
+            location: location,
+            address: address,
+            details: details,
+            password: password
+          }
+        ]);
+
+      if(error){
+
+        document.getElementById("message").innerHTML =
+          error.message;
+
+        document.getElementById("message").style.color = "red";
+
+      } else {
+
+        document.getElementById("message").innerHTML =
+          "Signup Successful!";
+
+        document.getElementById("message").style.color = "green";
+
+        // Clear Form
+        document.getElementById("name").value = "";
+        document.getElementById("username").value = "";
+        document.getElementById("mobile").value = "";
+        document.getElementById("location").value = "";
+        document.getElementById("address").value = "";
+        document.getElementById("details").value = "";
+        document.getElementById("password").value = "";
+      }
     }
 
-    document.getElementById("status").innerHTML =
-    "Searching Product...";
-
-    searchProduct(code);
-
-}
-
-</script>
+  </script>
 
 </body>
 </html>

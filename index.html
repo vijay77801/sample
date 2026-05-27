@@ -949,7 +949,7 @@ document.getElementById("topProfileLetter")
 .innerText = user.name.charAt(0);
 
 loadTheatres();
-
+detectLocation();   // ✅ ADD THIS LINE
 }
 
 /* SIDEBAR */
@@ -1447,7 +1447,43 @@ alert(
 );
 
 }
+function detectLocation(){
 
+const locationText = document.getElementById("locationText");
+
+if(!navigator.geolocation){
+locationText.innerText = "Geolocation not supported";
+return;
+}
+
+navigator.geolocation.getCurrentPosition(async (position)=>{
+
+const lat = position.coords.latitude;
+const lon = position.coords.longitude;
+
+try{
+const res = await fetch(
+`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+);
+
+const data = await res.json();
+
+locationText.innerText =
+data.address.city ||
+data.address.town ||
+data.address.village ||
+data.display_name.split(",")[0];
+
+}catch(err){
+locationText.innerText = "Unable to fetch location";
+}
+
+},
+()=>{
+locationText.innerText = "Location permission denied";
+});
+
+}
 </script>
 
 </body>

@@ -1,237 +1,1454 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Advanced Signup Form</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Movizz Premium</title>
 
-  <style>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial, sans-serif;
-    }
+<style>
 
-    body{
-      background:linear-gradient(135deg,#4facfe,#00f2fe);
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding:20px;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Montserrat',sans-serif;
+}
 
-    .container{
-      width:420px;
-      background:#fff;
-      padding:30px;
-      border-radius:15px;
-      box-shadow:0 5px 15px rgba(0,0,0,0.2);
-    }
+body{
+    background:#050816;
+    overflow-x:hidden;
+}
 
-    h2{
-      text-align:center;
-      margin-bottom:20px;
-      color:#333;
-    }
+/* BACKGROUND */
 
-    .input-box{
-      margin-bottom:15px;
-    }
+.bg1{
+    position:fixed;
+    width:280px;
+    height:280px;
+    background:#ff006e;
+    filter:blur(150px);
+    top:-100px;
+    left:-100px;
+    opacity:0.4;
+    z-index:-1;
+}
 
-    .input-box label{
-      display:block;
-      margin-bottom:5px;
-      font-weight:bold;
-      color:#444;
-    }
+.bg2{
+    position:fixed;
+    width:280px;
+    height:280px;
+    background:#8338ec;
+    filter:blur(150px);
+    bottom:-100px;
+    right:-100px;
+    opacity:0.4;
+    z-index:-1;
+}
 
-    .input-box input,
-    .input-box textarea{
-      width:100%;
-      padding:10px;
-      border:1px solid #ccc;
-      border-radius:8px;
-      font-size:16px;
-      outline:none;
-    }
+/* AUTH */
 
-    .input-box input:focus,
-    .input-box textarea:focus{
-      border-color:#4facfe;
-    }
+.auth-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:18px;
+}
 
-    textarea{
-      resize:none;
-      height:80px;
-    }
+.auth-box{
+    width:100%;
+    max-width:390px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(25px);
+    border-radius:30px;
+    padding:28px 20px;
+    border:1px solid rgba(255,255,255,0.08);
+}
 
-    button{
-      width:100%;
-      padding:12px;
-      border:none;
-      border-radius:8px;
-      background:#4facfe;
-      color:white;
-      font-size:18px;
-      cursor:pointer;
-    }
+.logo{
+    text-align:center;
+    font-size:38px;
+    font-weight:800;
+    background:linear-gradient(90deg,#ff006e,#8338ec,#3a86ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
 
-    button:hover{
-      background:#00c6fb;
-    }
+.subtitle{
+    text-align:center;
+    color:#cbd5e1;
+    margin-top:6px;
+    margin-bottom:26px;
+    font-size:13px;
+}
 
-    #message{
-      margin-top:15px;
-      text-align:center;
-      font-weight:bold;
-    }
+.tabs{
+    display:flex;
+    background:rgba(255,255,255,0.05);
+    border-radius:16px;
+    padding:5px;
+    margin-bottom:22px;
+}
 
-  </style>
+.tab-btn{
+    flex:1;
+    border:none;
+    padding:13px;
+    border-radius:13px;
+    background:none;
+    color:white;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.tab-btn.active{
+    background:linear-gradient(135deg,#ff006e,#8338ec);
+}
+
+.form{
+    display:none;
+}
+
+.form.active-form{
+    display:block;
+}
+
+.input-box{
+    margin-bottom:16px;
+}
+
+.input-box label{
+    display:block;
+    color:white;
+    margin-bottom:7px;
+    font-size:13px;
+}
+
+.input-box input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:rgba(255,255,255,0.06);
+    color:white;
+    outline:none;
+    font-size:14px;
+}
+
+.auth-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    color:white;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* POPUP */
+
+.popup{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.popup-box{
+    width:90%;
+    max-width:320px;
+    background:#0f172a;
+    border-radius:28px;
+    padding:30px 20px;
+    text-align:center;
+}
+
+.popup-icon{
+    font-size:65px;
+    margin-bottom:15px;
+}
+
+.popup-box h2{
+    color:white;
+    margin-bottom:10px;
+    font-size:24px;
+}
+
+.popup-box p{
+    color:#cbd5e1;
+    margin-bottom:22px;
+    font-size:14px;
+}
+
+.continue-btn{
+    border:none;
+    padding:14px 25px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    color:white;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* MAIN */
+
+.main-page{
+    display:none;
+    min-height:100vh;
+    padding-bottom:30px;
+}
+
+.top-bar{
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.search-box{
+    width:74%;
+}
+
+.search-box input{
+    width:100%;
+    padding:14px 16px;
+    border:none;
+    border-radius:16px;
+    background:rgba(255,255,255,0.06);
+    color:white;
+    outline:none;
+    font-size:14px;
+}
+
+.profile-btn{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* LOCATION */
+
+.location-card{
+    margin:0 16px;
+    padding:14px;
+    border-radius:22px;
+    background:rgba(255,255,255,0.06);
+    display:flex;
+    align-items:center;
+}
+
+.location-icon{
+    width:48px;
+    height:48px;
+    min-width:48px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:20px;
+    margin-right:12px;
+}
+
+.location-info span{
+    color:#94a3b8;
+    font-size:11px;
+}
+
+.location-info h2{
+    color:white;
+    margin-top:4px;
+    font-size:15px;
+    font-weight:700;
+}
+
+/* THEATRES */
+
+.section-title{
+    color:white;
+    font-size:22px;
+    margin:24px 16px 16px;
+}
+
+.theatre-list{
+    padding:0 16px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.theatre-card{
+    background:rgba(255,255,255,0.06);
+    border-radius:24px;
+    padding:16px;
+}
+
+.theatre-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.theatre-name{
+    color:white;
+    font-size:17px;
+    font-weight:700;
+}
+
+.rating{
+    background:#22c55e;
+    color:white;
+    padding:6px 10px;
+    border-radius:10px;
+    font-size:11px;
+}
+
+.theatre-location{
+    color:#cbd5e1;
+    margin-top:10px;
+    margin-bottom:14px;
+    font-size:13px;
+}
+
+.show-times{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.time-btn{
+    padding:10px 13px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#ff006e,#8338ec);
+    color:white;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    right:-300px;
+    width:280px;
+    height:100%;
+    background:#0f172a;
+    transition:0.4s;
+    z-index:9999;
+    padding:22px;
+}
+
+.sidebar.active{
+    right:0;
+}
+
+.close-btn{
+    color:white;
+    font-size:24px;
+    text-align:right;
+    cursor:pointer;
+}
+
+.profile-image{
+    width:100px;
+    height:100px;
+    border-radius:30px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:42px;
+    font-weight:700;
+    margin:auto;
+    margin-top:22px;
+}
+
+.profile-name{
+    color:white;
+    text-align:center;
+    margin-top:15px;
+    font-size:22px;
+}
+
+.member{
+    color:#94a3b8;
+    text-align:center;
+    margin-top:4px;
+    font-size:13px;
+}
+
+.info-card{
+    margin-top:25px;
+    background:rgba(255,255,255,0.06);
+    border-radius:18px;
+    padding:14px;
+    display:flex;
+    align-items:center;
+}
+
+.info-icon{
+    width:48px;
+    height:48px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    margin-right:12px;
+}
+
+.info-details span{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.info-details h4{
+    color:white;
+    margin-top:3px;
+    font-size:14px;
+}
+
+.logout-btn{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(135deg,#ef4444,#dc2626);
+    color:white;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* MOVIE */
+
+.movie-page{
+    padding:16px;
+}
+
+.back-btn{
+    border:none;
+    padding:12px 16px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#ff006e,#8338ec);
+    color:white;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.screen{
+    width:100%;
+    height:60px;
+    border-radius:50%;
+    background:linear-gradient(to bottom,#f8fafc,#94a3b8);
+    margin:28px 0 40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:black;
+    font-size:13px;
+    font-weight:800;
+}
+
+.seat-status{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+}
+
+.status-box{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:white;
+    font-size:12px;
+}
+
+.status-color{
+    width:16px;
+    height:16px;
+    border-radius:5px;
+}
+
+.seat-container{
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    gap:8px;
+}
+
+.seat{
+    aspect-ratio:1/1;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.available{
+    background:#22c55e;
+    color:white;
+}
+
+.booked{
+    background:#eab308;
+    color:black;
+}
+
+.selected{
+    background:#8338ec !important;
+    color:white;
+}
+
+.confirm-btn{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    color:white;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* PAYMENT */
+
+.payment-list{
+    margin-top:15px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.payment-card{
+    background:rgba(255,255,255,0.06);
+    border-radius:20px;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+}
+
+.payment-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.payment-icon{
+    width:50px;
+    height:50px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#ff006e,#8338ec,#3a86ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+}
+
+.payment-card h3{
+    color:white;
+    font-size:15px;
+}
+
+.payment-card p{
+    color:#94a3b8;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.payment-card span{
+    color:white;
+    font-size:24px;
+}
+
+</style>
 
 </head>
+
 <body>
 
-  <div class="container">
+<div class="bg1"></div>
+<div class="bg2"></div>
 
-    <h2>User Signup Form</h2>
+<!-- AUTH -->
 
-    <div class="input-box">
-      <label>Full Name</label>
-      <input type="text" id="name" placeholder="Enter full name">
-    </div>
+<div class="auth-page" id="authPage">
 
-    <div class="input-box">
-      <label>User Name</label>
-      <input type="text" id="username" placeholder="Enter username">
-    </div>
+<div class="auth-box">
 
-    <div class="input-box">
-      <label>Mobile Number</label>
-      <input type="text" id="mobile" placeholder="Enter mobile number">
-    </div>
+<div class="logo">
+MOVIZZ
+</div>
 
-    <div class="input-box">
-      <label>Location</label>
-      <input type="text" id="location" placeholder="Enter location">
-    </div>
+<div class="subtitle">
+Premium Cinema Booking Experience
+</div>
 
-    <div class="input-box">
-      <label>Address</label>
-      <textarea id="address" placeholder="Enter address"></textarea>
-    </div>
+<div class="tabs">
 
-    <div class="input-box">
-      <label>Details</label>
-      <textarea id="details" placeholder="Enter details"></textarea>
-    </div>
+<button class="tab-btn active" onclick="showSignup()">
+Signup
+</button>
 
-    <div class="input-box">
-      <label>Password</label>
-      <input type="password" id="password" placeholder="Enter password">
-    </div>
+<button class="tab-btn" onclick="showLogin()">
+Login
+</button>
 
-    <button onclick="signup()">Create Account</button>
+</div>
 
-    <div id="message"></div>
+<form id="signupForm" class="form active-form">
 
-  </div>
+<div class="input-box">
+<label>Name</label>
+<input type="text" id="signupName" required>
+</div>
 
-  <script>
+<div class="input-box">
+<label>Mobile Number</label>
+<input type="number" id="signupMobile" required>
+</div>
 
-    // ====================================
-    // SUPABASE URL & ANON KEY
-    // ====================================
+<div class="input-box">
+<label>Password</label>
+<input type="password" id="signupPassword" required>
+</div>
 
-    const SUPABASE_URL =
-      "https://ipudyahkijaofyuhzdtv.supabase.co";
+<button type="submit" class="auth-btn">
+Create Account
+</button>
 
-    const SUPABASE_ANON_KEY =
-      "sb_publishable_sEOEdQLjc99aRtQPVEPDTQ_PczbVtB3";
+</form>
 
-    // ====================================
+<form id="loginForm" class="form">
 
-    const client = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+<div class="input-box">
+<label>Name</label>
+<input type="text" id="loginName" required>
+</div>
 
-    async function signup(){
+<div class="input-box">
+<label>Password</label>
+<input type="password" id="loginPassword" required>
+</div>
 
-      const name = document.getElementById("name").value;
-      const username = document.getElementById("username").value;
-      const mobile = document.getElementById("mobile").value;
-      const location = document.getElementById("location").value;
-      const address = document.getElementById("address").value;
-      const details = document.getElementById("details").value;
-      const password = document.getElementById("password").value;
+<button type="submit" class="auth-btn">
+Login
+</button>
 
-      // Validation
-      if(
-        name === "" ||
-        username === "" ||
-        mobile === "" ||
-        location === "" ||
-        address === "" ||
-        details === "" ||
-        password === ""
-      ){
-        alert("Please fill all fields");
-        return;
-      }
+</form>
 
-      if(mobile.length !== 10){
-        alert("Enter valid 10 digit mobile number");
-        return;
-      }
+</div>
 
-      // Insert data into users table
-      const { data, error } = await client
-        .from("users")
-        .insert([
-          {
-            name: name,
-            username: username,
-            mobile: mobile,
-            location: location,
-            address: address,
-            details: details,
-            password: password
-          }
-        ]);
+</div>
 
-      if(error){
+<!-- POPUP -->
 
-        document.getElementById("message").innerHTML =
-          error.message;
+<div class="popup" id="popup">
 
-        document.getElementById("message").style.color = "red";
+<div class="popup-box">
 
-      } else {
+<div class="popup-icon">
+🍿
+</div>
 
-        document.getElementById("message").innerHTML =
-          "Signup Successful!";
+<h2 id="popupTitle"></h2>
 
-        document.getElementById("message").style.color = "green";
+<p id="popupText"></p>
 
-        // Clear Form
-        document.getElementById("name").value = "";
-        document.getElementById("username").value = "";
-        document.getElementById("mobile").value = "";
-        document.getElementById("location").value = "";
-        document.getElementById("address").value = "";
-        document.getElementById("details").value = "";
-        document.getElementById("password").value = "";
-      }
-    }
+<button class="continue-btn" onclick="goToMainPage()">
+Continue
+</button>
 
-  </script>
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main-page" id="mainPage">
+
+<div class="top-bar">
+
+<div class="search-box">
+
+<input type="text"
+placeholder="Search movies or theatres...">
+
+</div>
+
+<div class="profile-btn"
+onclick="openSidebar()"
+id="topProfileLetter">
+
+V
+
+</div>
+
+</div>
+
+<div class="location-card">
+
+<div class="location-icon">
+📍
+</div>
+
+<div class="location-info">
+
+<span>Your Current Location</span>
+
+<h2 id="locationText">
+Detecting location...
+</h2>
+
+</div>
+
+</div>
+
+<h2 class="section-title">
+Nearby Theatres
+</h2>
+
+<div class="theatre-list" id="theatreList"></div>
+
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar" id="sidebar">
+
+<div class="close-btn"
+onclick="closeSidebar()">
+
+✕
+
+</div>
+
+<div class="profile-image"
+id="profileLetter">
+
+V
+
+</div>
+
+<h2 class="profile-name"
+id="profileName"></h2>
+
+<p class="member">
+Premium Member
+</p>
+
+<div class="info-card">
+
+<div class="info-icon">
+📱
+</div>
+
+<div class="info-details">
+
+<span>Mobile Number</span>
+
+<h4 id="profileMobile"></h4>
+
+</div>
+
+</div>
+
+<button class="logout-btn"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+<script>
+
+let originalMainPage = "";
+let selectedSeat = null;
+
+/* TABS */
+
+function showSignup(){
+
+document.getElementById("signupForm")
+.classList.add("active-form");
+
+document.getElementById("loginForm")
+.classList.remove("active-form");
+
+document.querySelectorAll(".tab-btn")[0]
+.classList.add("active");
+
+document.querySelectorAll(".tab-btn")[1]
+.classList.remove("active");
+
+}
+
+function showLogin(){
+
+document.getElementById("loginForm")
+.classList.add("active-form");
+
+document.getElementById("signupForm")
+.classList.remove("active-form");
+
+document.querySelectorAll(".tab-btn")[1]
+.classList.add("active");
+
+document.querySelectorAll(".tab-btn")[0]
+.classList.remove("active");
+
+}
+
+/* SIGNUP */
+
+document.getElementById("signupForm")
+.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const name =
+document.getElementById("signupName").value;
+
+const mobile =
+document.getElementById("signupMobile").value;
+
+const password =
+document.getElementById("signupPassword").value;
+
+localStorage.setItem(
+
+"movizzUser",
+
+JSON.stringify({
+name,
+mobile,
+password
+})
+
+);
+
+document.getElementById("popup")
+.style.display = "flex";
+
+document.getElementById("popupTitle")
+.innerText = "Welcome " + name;
+
+document.getElementById("popupText")
+.innerText = "Account Created Successfully";
+
+});
+
+/* LOGIN */
+
+document.getElementById("loginForm")
+.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const loginName =
+document.getElementById("loginName").value;
+
+const loginPassword =
+document.getElementById("loginPassword").value;
+
+const user =
+JSON.parse(localStorage.getItem("movizzUser"));
+
+if(
+user &&
+loginName === user.name &&
+loginPassword === user.password
+){
+
+document.getElementById("popup")
+.style.display = "flex";
+
+document.getElementById("popupTitle")
+.innerText = "Welcome Back " + user.name;
+
+document.getElementById("popupText")
+.innerText = "Successfully Logged In";
+
+}
+
+else{
+
+alert("Invalid Login");
+
+}
+
+});
+
+/* MAIN */
+
+function goToMainPage(){
+
+document.getElementById("popup")
+.style.display = "none";
+
+document.getElementById("authPage")
+.style.display = "none";
+
+document.getElementById("mainPage")
+.style.display = "block";
+
+const user =
+JSON.parse(localStorage.getItem("movizzUser"));
+
+document.getElementById("profileName")
+.innerText = user.name;
+
+document.getElementById("profileMobile")
+.innerText = user.mobile;
+
+document.getElementById("profileLetter")
+.innerText = user.name.charAt(0);
+
+document.getElementById("topProfileLetter")
+.innerText = user.name.charAt(0);
+
+loadTheatres();
+
+}
+
+/* SIDEBAR */
+
+function openSidebar(){
+
+document.getElementById("sidebar")
+.classList.add("active");
+
+}
+
+function closeSidebar(){
+
+document.getElementById("sidebar")
+.classList.remove("active");
+
+}
+
+/* LOGOUT */
+
+function logout(){
+
+location.reload();
+
+}
+
+/* THEATRES */
+
+function loadTheatres(){
+
+const theatreList =
+document.getElementById("theatreList");
+
+const theatres = [
+
+{
+name:"Sri Satyanarayana Theatre",
+rating:"4.4 ★",
+location:"Main Road, Tanuku"
+},
+
+{
+name:"Lakshmi Theatre",
+rating:"4.2 ★",
+location:"Velpur Road, Tanuku"
+},
+
+{
+name:"Venkateswara Theatre",
+rating:"4.1 ★",
+location:"Tanuku Center"
+}
+
+];
+
+theatreList.innerHTML = "";
+
+theatres.forEach(function(theatre){
+
+theatreList.innerHTML += `
+
+<div class="theatre-card">
+
+<div class="theatre-top">
+
+<div class="theatre-name">
+${theatre.name}
+</div>
+
+<div class="rating">
+${theatre.rating}
+</div>
+
+</div>
+
+<div class="theatre-location">
+📍 ${theatre.location}
+</div>
+
+<div class="show-times">
+
+<button class="time-btn"
+onclick="openSeatLayout(
+'${theatre.name}',
+'Pushpa 2',
+'10:00 AM'
+)">
+10:00 AM
+</button>
+
+<button class="time-btn"
+onclick="openSeatLayout(
+'${theatre.name}',
+'Pushpa 2',
+'1:30 PM'
+)">
+1:30 PM
+</button>
+
+<button class="time-btn"
+onclick="openSeatLayout(
+'${theatre.name}',
+'Pushpa 2',
+'6:30 PM'
+)">
+6:30 PM
+</button>
+
+<button class="time-btn"
+onclick="openSeatLayout(
+'${theatre.name}',
+'Pushpa 2',
+'9:30 PM'
+)">
+9:30 PM
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* OPEN SEATS */
+
+function openSeatLayout(theatre,movie,time){
+
+originalMainPage =
+document.getElementById("mainPage").innerHTML;
+
+let seatHTML = "";
+
+for(let i=1;i<=64;i++){
+
+let seatClass = "";
+
+if(
+i==2 || i==5 || i==8 ||
+i==12 || i==18 || i==22 ||
+i==26 || i==30 || i==36 ||
+i==40 || i==45 || i==54
+){
+
+seatClass = "booked";
+
+}
+
+else{
+
+seatClass = "available";
+
+}
+
+seatHTML += `
+
+<div class="seat ${seatClass}"
+onclick="selectSeat(this)">
+${i}
+</div>
+
+`;
+
+}
+
+document.getElementById("mainPage").innerHTML = `
+
+<div class="movie-page">
+
+<button class="back-btn"
+onclick="goBackToMainPage()">
+← Back
+</button>
+
+<div style="
+margin-top:22px;
+background:rgba(255,255,255,0.06);
+padding:18px;
+border-radius:22px;
+">
+
+<h1 style="
+color:white;
+font-size:24px;
+margin-bottom:8px;
+">
+${movie}
+</h1>
+
+<p style="
+color:#cbd5e1;
+margin-bottom:5px;
+font-size:13px;
+">
+🎬 ${theatre}
+</p>
+
+<p style="
+color:#cbd5e1;
+font-size:13px;
+">
+⏰ Showtime : ${time}
+</p>
+
+</div>
+
+<div class="screen">
+SCREEN
+</div>
+
+<div class="seat-status">
+
+<div class="status-box">
+<div class="status-color"
+style="background:#22c55e"></div>
+Available
+</div>
+
+<div class="status-box">
+<div class="status-color"
+style="background:#eab308"></div>
+Booked
+</div>
+
+<div class="status-box">
+<div class="status-color"
+style="background:#8338ec"></div>
+Selected
+</div>
+
+</div>
+
+<div class="seat-container">
+${seatHTML}
+</div>
+
+<button class="confirm-btn"
+onclick="confirmSeatBooking(
+'${movie}',
+'${time}'
+)">
+Confirm Booking
+</button>
+
+</div>
+
+`;
+
+}
+
+/* BACK */
+
+function goBackToMainPage(){
+
+document.getElementById("mainPage")
+.innerHTML = originalMainPage;
+
+}
+
+/* SELECT */
+
+function selectSeat(seat){
+
+if(seat.classList.contains("booked")){
+
+return;
+
+}
+
+document.querySelectorAll(".seat")
+.forEach(function(s){
+
+s.classList.remove("selected");
+
+});
+
+seat.classList.add("selected");
+
+selectedSeat = seat.innerText;
+
+}
+
+/* PAYMENT PAGE */
+
+function confirmSeatBooking(movie,time){
+
+if(selectedSeat == null){
+
+alert("Please select a seat");
+
+return;
+
+}
+
+document.getElementById("mainPage").innerHTML = `
+
+<div class="movie-page">
+
+<button class="back-btn"
+onclick="goBackToMainPage()">
+← Back
+</button>
+
+<div style="
+margin-top:22px;
+background:rgba(255,255,255,0.06);
+padding:20px;
+border-radius:24px;
+">
+
+<h1 style="
+color:white;
+font-size:24px;
+margin-bottom:12px;
+">
+Payment
+</h1>
+
+<p style="
+color:#cbd5e1;
+font-size:14px;
+margin-bottom:5px;
+">
+🎬 ${movie}
+</p>
+
+<p style="
+color:#cbd5e1;
+font-size:14px;
+margin-bottom:5px;
+">
+⏰ ${time}
+</p>
+
+<p style="
+color:#cbd5e1;
+font-size:14px;
+">
+💺 Seat : ${selectedSeat}
+</p>
+
+</div>
+
+<h2 style="
+color:white;
+margin-top:26px;
+margin-bottom:16px;
+font-size:22px;
+">
+Choose Payment Method
+</h2>
+
+<div class="payment-list">
+
+<div class="payment-card"
+onclick="payNow('Google Pay')">
+
+<div class="payment-left">
+
+<div class="payment-icon">
+🟢
+</div>
+
+<div>
+
+<h3>Google Pay</h3>
+
+<p>UPI Payment</p>
+
+</div>
+
+</div>
+
+<span>›</span>
+
+</div>
+
+<div class="payment-card"
+onclick="payNow('PhonePe')">
+
+<div class="payment-left">
+
+<div class="payment-icon">
+🟣
+</div>
+
+<div>
+
+<h3>PhonePe</h3>
+
+<p>Fast Secure Payment</p>
+
+</div>
+
+</div>
+
+<span>›</span>
+
+</div>
+
+<div class="payment-card"
+onclick="payNow('Paytm')">
+
+<div class="payment-left">
+
+<div class="payment-icon">
+🔵
+</div>
+
+<div>
+
+<h3>Paytm</h3>
+
+<p>Wallet & UPI</p>
+
+</div>
+
+</div>
+
+<span>›</span>
+
+</div>
+
+<div class="payment-card"
+onclick="payNow('Credit Card')">
+
+<div class="payment-left">
+
+<div class="payment-icon">
+💳
+</div>
+
+<div>
+
+<h3>Credit / Debit Card</h3>
+
+<p>Visa, MasterCard</p>
+
+</div>
+
+</div>
+
+<span>›</span>
+
+</div>
+
+<div class="payment-card"
+onclick="payNow('Net Banking')">
+
+<div class="payment-left">
+
+<div class="payment-icon">
+🏦
+</div>
+
+<div>
+
+<h3>Net Banking</h3>
+
+<p>All Indian Banks</p>
+
+</div>
+
+</div>
+
+<span>›</span>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* PAYMENT SUCCESS */
+
+function payNow(method){
+
+alert(
+
+"🎉 Payment Successful\n\n" +
+
+"Payment Method : " + method +
+
+"\nSeat Number : " + selectedSeat +
+
+"\nEnjoy Your Movie 🍿"
+
+);
+
+}
+
+</script>
 
 </body>
 </html>
